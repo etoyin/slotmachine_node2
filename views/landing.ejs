@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><%= title %></title>
+<!-- <title></title> -->
+<head>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css" integrity="sha512-vebUliqxrVkBy3gucMhClmyQP9On/HAWQdKDXRaAlb/FKuTbxkjPKUyqVOxAcGwFDka79eTF+YXwfke1h3/wfg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/forms@0.5.7/src/index.min.js"></script>
+    <script src="/js/phaser.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
+    <script>
+
+        tailwind.config = {
+          content: ["*.{html,js,ejs}"],
+          theme: {
+            extend: {
+              fontFamily: {
+                'montserrat': ['Montserrat'],
+                'lato': ['Lato'],
+                'garamond': ['Garamond']
+                },
+                // keyframes: {
+                //     pulse: {
+                //     '0%': { boxShadow: '0 0 0 0 rgba(250,204,21, 1)' },
+                //     '70%': { boxShadow: '0 0 0 10px rgba(250,204,21, 1)' },
+                //     '100%': { boxShadow: '0 0 0 0 rgba(250,204,21, 1)' }
+                //     }
+                // },
+                // animation: {
+                //     pulse: 'pulse 2s cubic-bezier(0.4, 0.0, 0.6, 1) infinite'
+                // }
+            },
+          },
+          plugins: [
+            require('@tailwindcss/forms'),
+            require('tailwindcss-animate'),
+            require('@tailwindcss/ui'),
+          ]
+        }
+    
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body class="bg-[url('/png/landing.png')] bg-cover">
+    <!-- remove or comment unused configs before publish -->
+    <main class="absolute left-0 top-0 w-full flex flex-col items-center justify-center backdrop-blur-sm bg-black/10">
+        <div class="p-2 w-full sm:w-3/4 lg:w-1/2 text-center mt-20">
+            <h2 class="text-3xl sm:text-7xl font-bold text-yellow-400">Win Big!</h2>
+            <h3 class="text-4xl text-white font-semibold my-3">
+                Play for <span class="text-green-600 uppercase font-bold text-5xl">FREE</span>
+            </h3>
+            <h3 class="text-3xl text-white">No Deposit Needed!</h3>
+
+            <div class="animate-pulse text-white my-5 p-5 rounded shadow-yellow-400 border-4 shadow border-yellow-400 w-full sm:w-2/3 bg-black bg-opacity-70 mx-auto">
+                <h4 class="text-2xl font-semibold ">Collect your Daily Spins for a Chance to Win the</h4>
+                <h4 class="text-2xl font-semibold my-2">
+                    <span class="text-xl sm:text-4xl text-yellow-400 font-bold">$1,000,000</span> Jackpot!
+                </h4>
+                <p class=" text-lg my-5">Sign up and start playing now!</p>
+                <div class="">
+                    <div class="flex items-center gap-4">
+                        <i class="lar la-envelope text-3xl "></i>
+                        <form action="/register" method="post" class="w-full">
+                            <input required id="email" name="email" type="email" class=" p-2 w-full bg-gray-600 bg-opacity-40" placeholder="Enter your email">
+                        </form>
+                    </div>
+                    <div id="submit" class="bg-green-600 capitalize mt-5 p-3 rounded-full cursor-pointer"> Get your free spins</div>
+                </div>
+            </div>
+
+            <div class="relative bg-yellow-400 shadow-xl shadow-yellow-400 rounded border-4 shadow border-yellow-600 w-full sm:w-2/3 h-64 mx-auto rotate-3 my-8">
+                <div class="p-10"><i class="las la-star-of-life text-3xl text-yellow-600 sm:text-6xl"></i></div>
+                <h4 class="text-2xl font-semibold my-2 absolute bottom-5 mx-auto w-full">
+                    <span class="text-6xl font-bold">$1,000,000</span> <br> Jackpot!
+                </h4>
+            </div>
+
+            <div class="relative text-white bg-purple-900 bg-opacity-70 p-5 rounded border-2 shadow border-purple-600 w-full sm:w-2/3 h-64 mx-auto my-8">
+                <p class="text-center text-xl font-semibold">How to Win:</p>
+                <ol class="text-left list-decimal p-4 flex flex-col gap-2" type="1">
+                    <li>Sign up with your email</li>
+                    <li>Collect your daily free spins</li>
+                    <li>Spin the reels on our exciting slot machines</li>
+                    <li>Match the winning symbols</li>
+                    <li>Celebrate your massive $1,000,000 win!</li>
+                </ol>
+            </div>
+        </div>
+    </main>
+    <script>
+        const validateEmail = (email) => {
+            return String(email)
+            .toLowerCase()
+            .match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            );
+        };
+        $(document).ready(function(){
+
+            // const element = document.querySelector('.shadow-md');
+
+            // setInterval(()=>{
+
+            // },1000)
+
+            // // To show the shadow:
+            // element.classList.add('shadow-xl');
+
+            // // To hide the shadow:
+            // element.classList.remove('shadow-xl');
+            
+            fetch('/track-visit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    // Unique identifier, e.g., a UUID
+                    identifier: ''
+                })
+            })
+            .then(response => {
+                // Handle the response, if necessary
+                return response.json();
+            })
+            .then(res => {
+                console.log(res);
+                
+            })
+            .catch(error => {
+                console.error('Error tracking visit:', error);
+            });
+
+            $("#submit").click(function(){
+                let email = $("#email").val();
+
+                if(validateEmail(email)){
+
+                    fetch('/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            email
+                        })
+                        })
+                    .then(response => response.json())
+                    .then(data => {
+                        if(data.success){
+                            localStorage.setItem('user_id', JSON.stringify(data.data.insertId));
+                            window.location.replace("/home");
+                        }
+                        else{
+                            window.location.replace("/");
+                        }
+                        console.log(data);
+                        
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                    
+                    // $.post("/register", {
+                    //     body: JSON.stringify(email)
+                    // }, function(result){
+                    //     console.log(result);
+                    // });
+                }
+                else{
+                    alert("Incorrect email!");
+                }
+            })
+
+
+        })
+    </script>
+</body>
+
+</html>

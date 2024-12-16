@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><%= title %></title>
+<!-- <title></title> -->
+<head>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css" integrity="sha512-vebUliqxrVkBy3gucMhClmyQP9On/HAWQdKDXRaAlb/FKuTbxkjPKUyqVOxAcGwFDka79eTF+YXwfke1h3/wfg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/forms@0.5.7/src/index.min.js"></script>
+    <script src="/js/phaser.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
+    <script>
+
+        tailwind.config = {
+          content: ["*.{html,js,ejs}"],
+          theme: {
+            extend: {
+              fontFamily: {
+                'montserrat': ['Montserrat'],
+                'lato': ['Lato'],
+                'garamond': ['Garamond']
+                },
+                // keyframes: {
+                //     pulse: {
+                //     '0%': { boxShadow: '0 0 0 0 rgba(250,204,21, 1)' },
+                //     '70%': { boxShadow: '0 0 0 10px rgba(250,204,21, 1)' },
+                //     '100%': { boxShadow: '0 0 0 0 rgba(250,204,21, 1)' }
+                //     }
+                // },
+                // animation: {
+                //     pulse: 'pulse 2s cubic-bezier(0.4, 0.0, 0.6, 1) infinite'
+                // }
+            },
+          },
+          plugins: [
+            require('@tailwindcss/forms'),
+            require('tailwindcss-animate'),
+            require('@tailwindcss/ui'),
+          ]
+        }
+    
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body class="bg-[url('/png/Background_1.png')] bg-center bg-cover h-screen bg-no-repeat">
+    <!-- remove or comment unused configs before publish -->
+    <main class="absolute left-0 top-0 w-full flex flex-col items-center justify-center">
+        <div class="w-full sm:w-3/4 lg:w-1/2 flex items-center justify-center">
+            
+            <div class="bg-[#24334b] rounded-lg bg-contain bg-center bg-no-repeat text-white my-5 p-5 w-full sm:w-9/12 mx-auto">
+                <!-- <img src="/png/gui/MessagePanel.png" alt=""> -->
+                 <div class="text-center">
+                    <h2 class="text-3xl font-semibold my-2">Win the Jackpot!</h2>
+                    <h3 class="text-xl">1,000,000 USD</h3>
+                    <video class="mx-auto" width="150" height="" autoplay muted loop>
+                        <source src="/png/gold2.webm" type="video/webm">
+                        Your browser does not support the video tag.
+                    </video>
+                 </div>
+                 <form action="#" class="w-full">
+                    <div class="my-5">
+                        <div class="w-full flex justify-between">
+                            <div class="w-full mx-1">
+                                <label for="first_name" class="text-xs">First Name</label>
+                                <input type="text" class="text-black px-1 rounded w-full" name="first_name" id="first_name">
+                            </div>
+                            <div class="w-full mx-1">
+                                <label for="last_name" class="text-xs">Last Name</label>
+                                <input type="text" class="text-black px-1 rounded w-full" name="last_name" id="last_name">
+                            </div>
+                        </div>
+                        <div class=" my-5 mx-1">
+                            <div class="flex justify-between">
+                                <label for="card" class="text-xs">Credit Card Number</label>
+                                <span class="flex items-center justify-center">
+                                    <img class="w-5" src="/png/visa3.png" alt=""/>
+                                    <img class="ml-2 w-5 h-3" src="/png/mcard.png" alt=""/>
+                                </span>
+                            </div>
+                            <input type="text" class="text-black px-1 rounded w-full" name="card" id="card">
+                        </div>
+
+                        <div class="w-full flex justify-between">
+                            <div class="w-full mx-1">
+                                <label for="month" class="text-xs">Expiration Date</label>
+                                <select name="month" id="month" class="text-black h-6 px-1 rounded w-full">
+                                    <option value="">MM</option>
+                                    <option value="01">01</option>
+                                    <option value="02">02</option>
+                                    <option value="03">03</option>
+                                    <option value="04">04</option>
+                                    <option value="05">05</option>
+                                    <option value="06">06</option>
+                                    <option value="07">07</option>
+                                    <option value="08">08</option>
+                                    <option value="09">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                </select>
+                                
+                            </div>
+                            <div class="w-full mx-1">
+                                <label for="year" class="text-xs">u</label>
+                                <select name="year" id="year" class="text-black h-6 px-1 rounded w-full">
+                                    <option value="">YY</option>
+                                    <option value="23">23</option>
+                                    <option value="24">24</option>
+                                    <option value="25">25</option>
+                                    <option value="26">26</option>
+                                    <option value="27">27</option>
+                                    <option value="28">28</option>
+                                    <option value="29">29</option>
+                                    <option value="30">30</option>
+                                    <option value="31">31</option>
+                                    <option value="32">32</option>
+                                </select>
+                            </div>
+                            <div class="w-full mx-1">
+                                <label for="cvv" class="text-xs">CVV</label>
+                                <input type="number" class="text-black px-1 rounded w-full" name="cvv" id="cvv">
+                            </div>
+                        </div>
+                        <div class="mt-10">
+                            <p class="text-lg mb-2 text-center">Buy More Credits</p>
+
+                            <div class="rounded-full w-72 mx-auto text-center text-xl uppercase bg-green-600 p-1">
+                                Buy 100 credits for $1.99
+                            </div>
+                        </div>
+                    </div>
+                 </form>
+            </div>
+        </div>
+    </main>
+    <script>
+        const validateEmail = (email) => {
+            return String(email)
+            .toLowerCase()
+            .match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            );
+        };
+        $(document).ready(function(){
+
+            
+
+            let user_id = localStorage.getItem('user_id');
+            
+            fetch('/track_credit_card_page', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    user_id
+                })
+            })
+            .then(response => {
+                // Handle the response, if necessary
+                return response.json();
+            })
+            .then(res => {
+                console.log(res);
+            })
+            .catch(error => {
+                console.error('Error tracking visit:', error);
+            });
+
+
+
+
+            fetch('/get_wallet_balance', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    user_id
+                })
+            })
+            .then(response => {
+                // Handle the response, if necessary
+                return response.json();
+            })
+            .then(res => {
+                console.log(res);
+                $("#balance").text(
+                    res.data[0].balance ? res.data[0].balance : 0
+                )
+            })
+            .catch(error => {
+                console.error('Error tracking visit:', error);
+            });
+        })
+    </script>
+</body>
+
+</html>
