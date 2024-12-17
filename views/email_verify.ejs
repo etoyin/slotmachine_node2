@@ -13,67 +13,88 @@
     <script src="/js/phaser.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
     <script>
-
-        tailwind.config = {
-          content: ["*.{html,js,ejs}"],
-          theme: {
-            extend: {
-              fontFamily: {
-                'montserrat': ['Montserrat'],
-                'lato': ['Lato'],
-                'garamond': ['Garamond']
-                },
-                // keyframes: {
-                //     pulse: {
-                //     '0%': { boxShadow: '0 0 0 0 rgba(250,204,21, 1)' },
-                //     '70%': { boxShadow: '0 0 0 10px rgba(250,204,21, 1)' },
-                //     '100%': { boxShadow: '0 0 0 0 rgba(250,204,21, 1)' }
-                //     }
-                // },
-                // animation: {
-                //     pulse: 'pulse 2s cubic-bezier(0.4, 0.0, 0.6, 1) infinite'
-                // }
-            },
-          },
-          plugins: [
-            require('@tailwindcss/forms'),
-            require('tailwindcss-animate'),
-            require('@tailwindcss/ui'),
-          ]
-        }
-    
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
 </head>
 
-<body class="bg-[url('/png/email_verify.jpg')] bg-cover h-screen bg-no-repeat">
+<body style="
+        background-image: url('https://www.ct-interactive.com/assets/Uploads/blogimages/web_jackpot__ScaleWidthWzkwMF0.jpg'); 
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        position: relative;
+        height: 100vh;" 
+    class="">
     <!-- remove or comment unused configs before publish -->
-    <main class="absolute left-0 top-0 w-full flex flex-col items-center justify-center ">
-        <div class="p-2 w-full sm:w-3/4 lg:w-1/2 text-center mt-20">
+    <main style="
+            position:absolute;
+            left:0;
+            top:0; width:100%;
+            /* display:flex;
+            justify-content: center;
+            align-items: center; */
+            height: 100%;" 
+        class="">
+        <div style="
+                width:65%;
+                text-align:center;
+                padding: auto;
+                margin: auto;
+                margin-top: 120px;
+                vertical-align:middle;   
+                "    
+            class="">
             
-            <div class="bg-white bg-contain bg-center border-4 border-yellow-400 rounded bg-no-repeat text-white my-5 p-5 flex items-center justify-center w-full sm:w-9/12 mx-auto">
+            <div 
+                style="
+                    background-color: white;
+                    border: 5px solid #facc15;
+                    border-radius: 10px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    margin: auto;
+                    padding: 10px;"
+                class="">
                 <!-- <img src="/png/gui/MessagePanel.png" alt=""> -->
                  <div class="">
-                    <p class="p-2 px-4 text-2xl my-5 sm:text-4xl font-semibold text-yellow-600">
+                    <p
+                        style="
+                            padding: 10px;
+                            font-size: 35px;
+                            color: #ca8a04;
+                            font-weight: 600"
+                        class="">
                         Your Verification Code
-                        To Claim <span class="text-red-600 font-bold"> 3 FREE SPINS !</span>
+                        To Claim <span style="color:red;font-weight:bold" class=""> 3 FREE SPINS !</span>
                     </p>
 
-                    <p class="text-xl text-black my-10">
+                    <p style="font-size:20px; margin-top:40px; margin-bottom: 40px;" class="">
                         Click the button below to verify your email:
                     </p>
                    
                     
-                    <div class="mt-3 text-black">
-                        <a href=<%=url%>>
-                            <div class="bg-[#fbe80a] w-40 p-2 rounded-lg mx-auto">Verify Email</div>
+                    <div style="margin-top: 20px;" class="">
+                        <a href=<%=url%> >
+                            <div
+                                style="
+                                    width: fit-content; 
+                                    margin: auto; 
+                                    background-color: #fbe80a; 
+                                    padding: 10px;
+                                    border-radius: 10px;" 
+                                class="">Verify Email</div>
                         </a>
                     </div>
                     
-                        <p class="my-5 text-black"><a href=<%=url%> class="underline">Or click here</a> to verify instantly.</p>
-                        <p><%=url%></p>
+                        <p 
+                            style="margin-top: 15px; margin-bottom: 15px;"
+                            class="">
+                            <a href=<%=url%> class="underline">Or click here</a> to verify instantly.</p>
                     
-                    <p class="text-black font-bold">Hurry – your code expires soon!</p>
+                    <p style="font-weight: bold;">Hurry – your code expires soon!</p>
                  </div>
             </div>
         </div>

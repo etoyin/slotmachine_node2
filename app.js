@@ -8,11 +8,19 @@ var cookieParser = require('cookie-parser')
 
 require("./controllers/DailyCronJobs");
 
+
 app.use(express.json());
 app.use(cookieParser())
 app.use('/', authRoutes);
 app.use('/', userRoutes);
 
+app.get("/test", (req, res)=>{
+  res.render('daily_mail_cron.ejs', {
+    title: 'Slotgame | Landing Page',
+    // message: message,
+    url: ''
+  });
+});
 
 app.listen(3000, () => {
 

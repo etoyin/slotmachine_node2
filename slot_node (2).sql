@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 16, 2024 at 10:18 AM
+-- Generation Time: Dec 17, 2024 at 01:43 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -24,6 +24,20 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `campaign_data`
+--
+
+CREATE TABLE `campaign_data` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `number` varchar(250) NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `credit_card_page_visits`
 --
 
@@ -40,7 +54,55 @@ CREATE TABLE `credit_card_page_visits` (
 --
 
 INSERT INTO `credit_card_page_visits` (`id`, `user_id`, `number`, `created_at`, `updated_at`) VALUES
-(1, 17, '124', '2024-12-12 19:06:31', '2024-12-16 10:08:29');
+(1, 17, '125', '2024-12-12 19:06:31', '2024-12-16 10:27:45'),
+(2, 18, '1', '2024-12-16 11:03:51', '2024-12-16 11:03:51'),
+(3, 20, '1', '2024-12-16 11:11:32', '2024-12-16 11:11:32'),
+(4, 21, '1', '2024-12-16 11:15:03', '2024-12-16 11:15:03'),
+(5, 22, '1', '2024-12-16 11:16:31', '2024-12-16 11:16:31'),
+(6, 23, '1', '2024-12-16 11:18:01', '2024-12-16 11:18:01'),
+(7, 24, '1', '2024-12-16 11:19:51', '2024-12-16 11:19:51'),
+(8, 25, '1', '2024-12-16 11:35:42', '2024-12-16 11:35:42'),
+(9, 27, '2', '2024-12-16 11:39:04', '2024-12-16 11:39:08'),
+(10, 30, '1', '2024-12-16 13:46:56', '2024-12-16 13:46:56'),
+(11, 31, '1', '2024-12-16 14:00:36', '2024-12-16 14:00:36'),
+(12, 32, '1', '2024-12-16 14:46:55', '2024-12-16 14:46:55'),
+(13, 33, '1', '2024-12-16 15:04:59', '2024-12-16 15:04:59'),
+(14, 35, '1', '2024-12-16 20:28:50', '2024-12-16 20:28:50');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `daily_email_clicks`
+--
+
+CREATE TABLE `daily_email_clicks` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `number` varchar(250) NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `email_verification_clicks`
+--
+
+CREATE TABLE `email_verification_clicks` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `number` varchar(250) NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `email_verification_clicks`
+--
+
+INSERT INTO `email_verification_clicks` (`id`, `user_id`, `number`, `created_at`, `updated_at`) VALUES
+(1, 36, '2', '2024-12-16 23:11:53', '2024-12-16 23:11:54');
 
 -- --------------------------------------------------------
 
@@ -61,7 +123,8 @@ CREATE TABLE `fund_page_visits` (
 --
 
 INSERT INTO `fund_page_visits` (`id`, `user_id`, `number`, `created_at`, `updated_at`) VALUES
-(1, 17, '29', '2024-12-12 18:16:07', '2024-12-12 20:12:35');
+(1, 17, '29', '2024-12-12 18:16:07', '2024-12-12 20:12:35'),
+(2, 35, '6', '2024-12-16 20:26:46', '2024-12-16 20:35:24');
 
 -- --------------------------------------------------------
 
@@ -89,7 +152,26 @@ INSERT INTO `gamer_profile` (`id`, `user_id`, `balance`, `number_visits`, `numbe
 (1, 14, NULL, NULL, NULL, NULL, NULL, '2024-12-12 09:11:10', '2024-12-12 09:11:10'),
 (2, 15, NULL, NULL, NULL, NULL, NULL, '2024-12-12 09:39:00', '2024-12-12 09:39:00'),
 (3, 16, NULL, NULL, NULL, NULL, NULL, '2024-12-12 09:40:47', '2024-12-12 09:40:47'),
-(4, 17, '1000', NULL, NULL, NULL, NULL, '2024-12-12 09:48:18', '2024-12-12 18:54:18');
+(4, 17, '1000', NULL, NULL, NULL, NULL, '2024-12-12 09:48:18', '2024-12-12 18:54:18'),
+(5, 18, NULL, NULL, NULL, NULL, NULL, '2024-12-16 11:01:01', '2024-12-16 11:01:01'),
+(6, 19, NULL, NULL, NULL, NULL, NULL, '2024-12-16 11:03:58', '2024-12-16 11:03:58'),
+(7, 20, NULL, NULL, NULL, NULL, NULL, '2024-12-16 11:08:37', '2024-12-16 11:08:37'),
+(8, 21, NULL, NULL, NULL, NULL, NULL, '2024-12-16 11:11:35', '2024-12-16 11:11:35'),
+(9, 22, NULL, NULL, NULL, NULL, NULL, '2024-12-16 11:15:09', '2024-12-16 11:15:09'),
+(10, 23, NULL, NULL, NULL, NULL, NULL, '2024-12-16 11:16:34', '2024-12-16 11:16:34'),
+(11, 24, NULL, NULL, NULL, NULL, NULL, '2024-12-16 11:18:02', '2024-12-16 11:18:02'),
+(12, 25, NULL, NULL, NULL, NULL, NULL, '2024-12-16 11:19:53', '2024-12-16 11:19:53'),
+(13, 26, NULL, NULL, NULL, NULL, NULL, '2024-12-16 11:35:45', '2024-12-16 11:35:45'),
+(14, 27, NULL, NULL, NULL, NULL, NULL, '2024-12-16 11:37:38', '2024-12-16 11:37:38'),
+(15, 28, NULL, NULL, NULL, NULL, NULL, '2024-12-16 11:39:11', '2024-12-16 11:39:11'),
+(16, 29, NULL, NULL, NULL, NULL, NULL, '2024-12-16 11:48:18', '2024-12-16 11:48:18'),
+(17, 30, NULL, NULL, NULL, NULL, NULL, '2024-12-16 11:49:27', '2024-12-16 11:49:27'),
+(18, 31, NULL, NULL, NULL, NULL, NULL, '2024-12-16 13:46:56', '2024-12-16 13:46:56'),
+(19, 32, NULL, NULL, NULL, NULL, NULL, '2024-12-16 14:00:45', '2024-12-16 14:00:45'),
+(20, 33, NULL, NULL, NULL, NULL, NULL, '2024-12-16 14:46:51', '2024-12-16 14:46:51'),
+(21, 34, NULL, NULL, NULL, NULL, NULL, '2024-12-16 15:05:05', '2024-12-16 15:05:05'),
+(22, 35, NULL, NULL, NULL, NULL, NULL, '2024-12-16 20:15:20', '2024-12-16 20:15:20'),
+(23, 36, NULL, NULL, NULL, NULL, NULL, '2024-12-16 23:07:24', '2024-12-16 23:07:24');
 
 -- --------------------------------------------------------
 
@@ -110,7 +192,26 @@ CREATE TABLE `game_page_visits` (
 --
 
 INSERT INTO `game_page_visits` (`id`, `user_id`, `number`, `created_at`, `updated_at`) VALUES
-(1, 17, '66', '2024-12-12 10:34:53', '2024-12-12 20:11:50');
+(1, 17, '67', '2024-12-12 10:34:53', '2024-12-16 10:58:56'),
+(2, 18, '1', '2024-12-16 11:01:04', '2024-12-16 11:01:04'),
+(3, 19, '1', '2024-12-16 11:03:59', '2024-12-16 11:03:59'),
+(4, 20, '1', '2024-12-16 11:08:38', '2024-12-16 11:08:38'),
+(5, 21, '1', '2024-12-16 11:11:48', '2024-12-16 11:11:48'),
+(6, 22, '1', '2024-12-16 11:15:10', '2024-12-16 11:15:10'),
+(7, 23, '1', '2024-12-16 11:16:37', '2024-12-16 11:16:37'),
+(8, 24, '1', '2024-12-16 11:18:04', '2024-12-16 11:18:04'),
+(9, 25, '1', '2024-12-16 11:19:55', '2024-12-16 11:19:55'),
+(10, 26, '1', '2024-12-16 11:35:49', '2024-12-16 11:35:49'),
+(11, 27, '1', '2024-12-16 11:37:40', '2024-12-16 11:37:40'),
+(12, 28, '1', '2024-12-16 11:39:13', '2024-12-16 11:39:13'),
+(13, 29, '1', '2024-12-16 11:48:26', '2024-12-16 11:48:26'),
+(14, 30, '1', '2024-12-16 11:49:29', '2024-12-16 11:49:29'),
+(15, 31, '1', '2024-12-16 13:47:00', '2024-12-16 13:47:00'),
+(16, 32, '1', '2024-12-16 14:00:54', '2024-12-16 14:00:54'),
+(17, 33, '1', '2024-12-16 14:47:00', '2024-12-16 14:47:00'),
+(18, 34, '3', '2024-12-16 15:05:11', '2024-12-16 15:50:32'),
+(19, 35, '8', '2024-12-16 20:15:24', '2024-12-16 22:42:30'),
+(20, 36, '2', '2024-12-16 23:07:34', '2024-12-16 23:12:05');
 
 -- --------------------------------------------------------
 
@@ -131,7 +232,8 @@ CREATE TABLE `spins_number` (
 --
 
 INSERT INTO `spins_number` (`id`, `user_id`, `number`, `created_at`, `updated_at`) VALUES
-(2, 17, '8', '2024-12-12 10:13:57', '2024-12-12 12:26:39');
+(2, 17, '8', '2024-12-12 10:13:57', '2024-12-12 12:26:39'),
+(3, 35, '15', '2024-12-16 20:26:26', '2024-12-16 20:36:22');
 
 -- --------------------------------------------------------
 
@@ -143,6 +245,7 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `email` varchar(250) NOT NULL,
   `password` varchar(250) DEFAULT NULL,
+  `verify_token` varchar(250) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -151,8 +254,8 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `email`, `password`, `created_at`, `updated_at`) VALUES
-(17, 'toyinadesina60@gmail.com', '', '2024-12-12 09:48:18', '2024-12-12 09:48:18');
+INSERT INTO `users` (`id`, `email`, `password`, `verify_token`, `created_at`, `updated_at`) VALUES
+(36, 'toyinadesina60@gmail.com', '', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRveWluYWRlc2luYTYwQGdtYWlsLmNvbSIsImlhdCI6MTczNDM4Njg0MywiZXhwIjoxNzM0NDczMjQzfQ.VXTEAkLWDJIkT4FZDCQzjR3f3UedPyWrFVmpe22frIo', '2024-12-16 23:07:23', '2024-12-16 23:07:23');
 
 -- --------------------------------------------------------
 
@@ -267,9 +370,27 @@ INSERT INTO `visits` (`id`, `identifier`, `number`, `created_at`, `updated_at`) 
 --
 
 --
+-- Indexes for table `campaign_data`
+--
+ALTER TABLE `campaign_data`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `credit_card_page_visits`
 --
 ALTER TABLE `credit_card_page_visits`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `daily_email_clicks`
+--
+ALTER TABLE `daily_email_clicks`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `email_verification_clicks`
+--
+ALTER TABLE `email_verification_clicks`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -314,40 +435,58 @@ ALTER TABLE `visits`
 --
 
 --
+-- AUTO_INCREMENT for table `campaign_data`
+--
+ALTER TABLE `campaign_data`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `credit_card_page_visits`
 --
 ALTER TABLE `credit_card_page_visits`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT for table `daily_email_clicks`
+--
+ALTER TABLE `daily_email_clicks`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `email_verification_clicks`
+--
+ALTER TABLE `email_verification_clicks`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `fund_page_visits`
 --
 ALTER TABLE `fund_page_visits`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `gamer_profile`
 --
 ALTER TABLE `gamer_profile`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `game_page_visits`
 --
 ALTER TABLE `game_page_visits`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `spins_number`
 --
 ALTER TABLE `spins_number`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `visits`

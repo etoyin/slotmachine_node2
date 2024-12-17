@@ -156,14 +156,14 @@ exports.landing = (req, res) => {
     }
   }
 };
-
+const path = require('path');
+const hbs = require('nodemailer-express-handlebars');
 const nodemailer = require('nodemailer');
 const { findCampId, updateVisit, createVisit } = require('../models/campaignData');
 async function sendVerificationEmail(email, token, id) {
   const transporter = nodemailer.createTransport({
     host: process.env.MAIL_HOST,
     port: process.env.MAIL_PORT,
-    // service:'sendGrid',
     secure: false, // use TLS
     auth: {
       user: process.env.MAIL_USERNAME,
@@ -177,29 +177,37 @@ async function sendVerificationEmail(email, token, id) {
   let url = base_url+'/verify-email?token='+token+"&email?="+email+"&id="+id;
 
 
-
-  ejs.renderFile("./views/email_verify2.ejs", {url}, async function(error, data){
-    if(error){
-      console.log(error);
+    const handlebarOptions = {
+      viewEngine: {
+        extName: ".handlebars",
+        partialsDir: path.resolve('./views'),
+        defaultLayout: false,
+      },
+      viewPath: path.resolve('./views'),
+      extName: ".handlebars",
     }
-    else{
-      const mailOptions = {
-        from: `${process.env.MAIL_FROM_NAME} <${process.env.MAIL_FROM_ADDRESS}>`,
-        to: email,
-        subject: '🎉 Your Verification Link to Claim 3 Free Spins!',
-        html: data
-      };
 
-      // console.log("html data ======================>", mailOptions.html);
-      await transporter.sendMail(mailOptions, function (err, info) {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log('Message sent: ' + info.response);
-        }
-      });
-    }
-  })
+    transporter.use('compile', hbs(handlebarOptions));
+
+
+    const mailOptions = {
+      from: `${process.env.MAIL_FROM_NAME} <${process.env.MAIL_FROM_ADDRESS}>`,
+      to: email,
+      subject: '🎉 Your Verification Link to Claim 3 Free Spins!',
+      template: 'email_verify',
+      context: {
+        url
+      }
+    };
+
+    // console.log("html data ======================>", mailOptions.html);
+    await transporter.sendMail(mailOptions, function (err, info) {
+      if (err) {
+          console.log(err);
+      } else {
+          console.log('Message sent: ' + info.response);
+      }
+    });
 }
 
 exports.createUser = async (req, res) => {
@@ -238,7 +246,6 @@ exports.createUser = async (req, res) => {
       });
 
       
-
       // res.render('index.ejs', {
       //     title: 'Slotgame | Game Page',
       //     success: 1,
