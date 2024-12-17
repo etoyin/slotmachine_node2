@@ -15,7 +15,7 @@ app.use('/', authRoutes);
 app.use('/', userRoutes);
 
 app.get("/test", (req, res)=>{
-  res.render('daily_mail_cron.ejs', {
+  res.render('demo.ejs', {
     title: 'Slotgame | Landing Page',
     // message: message,
     url: ''
