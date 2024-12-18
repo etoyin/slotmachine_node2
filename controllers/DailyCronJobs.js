@@ -4,6 +4,7 @@ const nodemailer = require('nodemailer');
 const { getAllUsers } = require("../models/user");
 const ejs = require("ejs");
 
+require('dotenv').config();
 
 
 
@@ -31,7 +32,7 @@ async function sendVerificationEmail(email, id) {
 
 
 
-  ejs.renderFile("./views/daily_mail_cron.ejs", {url}, async function(error, data){
+  ejs.renderFile("./views/demo.ejs", {url}, async function(error, data){
     if(error){
       console.log(error);
     }
@@ -50,6 +51,7 @@ async function sendVerificationEmail(email, id) {
         } else {
             console.log('Message sent: ' + info.response);
         }
+        
       });
     }
   })
@@ -63,10 +65,10 @@ async function sendVerificationEmail(email, id) {
 
 
 
-scheduleJob('0 9,18 * * *', ()=>{
+scheduleJob('0 9,18 * * *', ()=>{ //, '0 9,18 * * *' '* * * * *'
     getAllUsers((error, results) => {
         if(error){
-            console.log(err);
+            console.log(error);
             return res.status(500).json({
                 success: 0,
                 message: "There was an error, getting all!"

@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user.router');
+const adminRoutes = require('./routes/admin_router');
 const path = require('path');
 var cookieParser = require('cookie-parser')
 
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(cookieParser())
 app.use('/', authRoutes);
 app.use('/', userRoutes);
+app.use('/', adminRoutes);
 
 app.get("/test", (req, res)=>{
   res.render('demo.ejs', {

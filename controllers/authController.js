@@ -139,9 +139,9 @@ exports.landing = (req, res) => {
               // message: message,
               // data: ''
           });
-          res.json({
-            error
-          })
+          // res.json({
+          //   error
+          // })
         }else{
           res.redirect('/home');
         }
