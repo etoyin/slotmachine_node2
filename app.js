@@ -24,15 +24,23 @@ app.get("/test", (req, res)=>{
   });
 });
 
-app.listen(3000, () => {
+app.listen(3300, () => {
 
-  console.log('Server is running on port 3000');
+  console.log('Server is running on port 3300');
 });
+
+
 
 
 app.set('views', __dirname + '/views'); // set express to look in this folder to render our view
 app.set('view engine', 'ejs'); // configure template engine
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json()); // parse form data client
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), {
+  setHeaders: (res, path) => {
+    if (path.endsWith('.css')) {
+        res.setHeader('Content-Type', 'text/css');
+    }
+  }
+}));
 // app.use(fileUpload());
