@@ -82,12 +82,17 @@ exports.landing = (req, res) => {
       camp_id: req.query.camp
     }
   };
+  let errorCheck = false;
   if(req.query.camp){
     findCampId(req.query.camp, (error, results) => {
       if(results && results.length){
         let data = results[0];
+        if(req.query.email){
+          data.email = req.query.email
+        }
         updateVisit(data, (err, resu) => {
           if(err){
+              errorCheck = true;
               console.log(err);
               return res.status(500).json({
                 success: 0,
@@ -99,6 +104,7 @@ exports.landing = (req, res) => {
       else{
         createVisit(reqq, (error, results) => {
           if(error){
+              errorCheck = true;
               console.log(error);
               return res.status(500).json({
                 success: 0,
@@ -109,6 +115,10 @@ exports.landing = (req, res) => {
       }
   
     });  
+    if(errorCheck) {
+      return
+    };
+    console.log(errorCheck);
   }
   if(req.query.email){
     User.findByEmail(req.query.email, (error, results) => {
@@ -262,7 +272,7 @@ exports.createUserFromAd = async (req, res) => {
   const token_email = sign({ email: body.email}, process.env.JWT_SECRET,{expiresIn: '1d'});
   body.token_email = token_email;
 
-  
+
   create(body, (error, results) => {
       if(error){
           console.log(error);

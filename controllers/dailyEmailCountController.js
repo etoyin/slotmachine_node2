@@ -56,19 +56,19 @@ exports.createDailyEmailClicks = async (req, res) => {
 
     const token = sign({ email: email}, process.env.JWT_SECRET,{});
     res.cookie('auth',token);
-    findUserId(id, (error, results) => {
-      if(results && results.length){
-        let data = results[0];
-        updateVisit(data, (err, resu) => {
-          if(err){
-              console.log(err);
-              res.redirect('/');
-          }
-          res.redirect('/home?id='+id);
+    // findUserId(id, (error, results) => {
+    //   if(results && results.length){
+    //     let data = results[0];
+    //     updateVisit(data, (err, resu) => {
+    //       if(err){
+    //           console.log(err);
+    //           res.redirect('/');
+    //       }
+    //       res.redirect('/home?id='+id);
   
-        })
-      }
-      else{
+    //     })
+    //   }
+    //   else{
         createVisits(req, (error, results) => {
           if(error){
               console.log(error);
@@ -76,8 +76,8 @@ exports.createDailyEmailClicks = async (req, res) => {
           }
           res.redirect('/home?id='+id);
       });
-      }
-    });
+    //   }
+    // });
     
 }
   

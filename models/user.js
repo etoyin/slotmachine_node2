@@ -45,6 +45,24 @@ const User = {
       )
   },
 
+  updateVerified: (data, callback) => {
+    pool.query(
+      `update users set
+        verified=?
+        where id=?`,
+        [
+          true,
+          data
+        ],
+        (error, results, field) => {
+          if(error){
+            return callback(error);
+          }
+          return callback(null, results)
+        }
+    )
+  },
+
   createGameProfile: (id, callback) => {
     
     pool.query(

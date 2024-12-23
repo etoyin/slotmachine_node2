@@ -38,26 +38,26 @@ exports.createCreditVisits = async (req, res) => {
     // body.identifier = v4();
     
   
-    findUserId(body.user_id, (error, results) => {
-      if(results && results.length){
-        let data = results[0];
-        updateVisit(data, (err, resu) => {
-          if(err){
-              console.log(err);
-              return res.status(500).json({
-                success: 0,
-                message: "There was an error!"
-              });
-          }
-          return res.status(200).json({
-            success: 1,
-            data: resu,
-            message: "Your Visit has been recorded and added!"
-          });
+    // findUserId(body.user_id, (error, results) => {
+    //   if(results && results.length){
+    //     let data = results[0];
+    //     updateVisit(data, (err, resu) => {
+    //       if(err){
+    //           console.log(err);
+    //           return res.status(500).json({
+    //             success: 0,
+    //             message: "There was an error!"
+    //           });
+    //       }
+    //       return res.status(200).json({
+    //         success: 1,
+    //         data: resu,
+    //         message: "Your Visit has been recorded and added!"
+    //       });
   
-        })
-      }
-      else{
+    //     })
+    //   }
+    //   else{
         createVisits(req, (error, results) => {
           if(error){
               console.log(error);
@@ -72,8 +72,8 @@ exports.createCreditVisits = async (req, res) => {
             message: "Your visit has been recorded!"
           });
       });
-      }
-    });
+    //   }
+    // });
     
 }
   

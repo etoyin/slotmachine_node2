@@ -1,0 +1,163 @@
+<%- include ('partials/header.ejs') %>
+<div class="p-4 overflow-x-auto sm:ml-64">
+    <div class="p-4 mb-5 bg-gray-200">
+        <p class="text-xl font-bold text-center text-gray-600 sm:texl-3xl"><%=heading%></p>
+    </div>
+    <div class="">
+        <form id="form"  method="post">
+            <div class="grid gap-6 mb-6 md:grid-cols-3">
+                <div>
+                    <input placeholder="Enter Start Date" name="start" type="text" id="start" class="date_ bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John" required />
+                </div>
+                <div>
+                    <input placeholder="Enter End Date" name="end" type="text" id="end" class="date_ bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Doe" required />
+                </div>
+                <div>
+                    <button id="submit" class="bg-blue-500 border uppercase border-gray-300 text-sm rounded-lg text-white font-semibold block w-24 p-2.5">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="">
+        <canvas width=100 id="myChart"></canvas>
+    </div>
+</div>
+<script>
+    
+    function formatDate(dateString) {
+        try {
+          const dateObj = new Date(dateString);
+          if (isNaN(dateObj)) {
+              return null; // Handle invalid date
+          }
+      
+      
+          const monthNames = [
+            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+          ];
+      
+          const month = monthNames[dateObj.getMonth()];
+          const day = String(dateObj.getDate()).padStart(2, '0');
+          const year = String(dateObj.getFullYear()).slice(-2);
+      
+      
+          return `${month} ${day}, ${year}`;
+        }
+         catch (error) {
+              console.error("Error formatting date:", error);
+              return null;
+          }
+    }
+    let start = <%- JSON.stringify(start) %>;
+    let end = <%- JSON.stringify(end) %>;
+    let data = <%- JSON.stringify(data) %>;
+    let label = <%- JSON.stringify(label) %>;
+    let search_url = <%- JSON.stringify(search_url) %>;
+    const ctx = document.getElementById('myChart');
+    
+    function fillMissingDates(dateObject, start, end) {
+        // Get an array of date strings
+        const dateStrings = Object.keys(dateObject).sort();
+        // if (dateStrings.length === 0) return dateObject // If empty object
+    
+        // Get the start and end date
+        const startDate = new Date(start);
+        const endDate = new Date(end);
+    
+        // Create a new date to iterate with
+        let currentDate = new Date(startDate);
+    
+        while (currentDate <= endDate) {
+        const currentDateString = currentDate.toISOString().split('T')[0]; // Extract only YYYY-MM-DD format
+        if (!dateObject.hasOwnProperty(currentDateString)) {
+            dateObject[currentDateString] = 0;
+        }
+
+
+        // Move to the next day
+        currentDate.setDate(currentDate.getDate() + 1)
+        }
+    
+        return Object.fromEntries(
+        Object.entries(dateObject).sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
+        );
+    }
+    data = fillMissingDates(data, start, end);
+    let keys = [];
+    let values = [];
+
+    Object.keys(data).forEach(key => {
+        keys.push(formatDate(key))
+    });
+
+
+    Object.values(data).forEach(value => {
+        values.push(value)
+    });
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+        labels: keys,
+        datasets: [{
+            label: label,
+            data: values,
+            borderWidth: 1
+        }]
+        },
+        options: {
+        scales: {
+            y: {
+            beginAtZero: true
+            }
+        }
+        }
+    });
+
+    console.log(data);
+    function isDateStringValid(dateString) {
+        const regex = /^\d{4}-\d{2}-\d{2}$/;
+        if (!regex.test(dateString)) {
+          return false;  // Check the basic format first
+        }
+        const [year, month, day] = dateString.split("-").map(Number);
+        const dateObj = new Date(year, month - 1, day); // Month is 0-indexed
+        
+         if (isNaN(dateObj.getTime())) {
+           return false; // check is invalid date
+         }
+
+        // Check that the date components are valid
+       return  dateObj.getFullYear() === year &&
+               dateObj.getMonth() === month - 1 &&
+               dateObj.getDate() === day;
+    }
+    $(document).ready(function(){
+        $("#submit").click(function(e){
+            e.preventDefault();
+            let start = $("#start").val();
+            let end = $("#end").val();
+            if(isDateStringValid(start) && isDateStringValid(end)){
+                //<!-- console.log(start, end) -->
+                //$("#form")[0].submit();
+                window.location.replace(`${search_url}?start=${start}&end=${end}`)
+            }
+            else{
+                alert("Your have to fill the form to submit it.");
+                console.log(start);
+            }
+        })
+        $("form").find('.date_').each(function(){
+            $(this).focus(function(){
+                console.log()
+                $(this)[0].type = "date"
+            })
+            $(this).blur(function(){
+                console.log()
+                $(this)[0].type = "text"
+            })
+        })
+    })
+</script>
+<%- include ('partials/footer.ejs') %>

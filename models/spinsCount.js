@@ -7,7 +7,7 @@ const Spins = {
         const { user_id } = req.body;
         
         pool.query(
-          `insert into spins_number
+          `insert into spins_numbers
             (user_id, number)
             values(?,?)`,
             [user_id, 1],
@@ -27,7 +27,7 @@ const Spins = {
         number
         } = data;
         pool.query(
-        `update spins_number set
+        `update spins_numbers set
             number=?
             where user_id=?`,
             [
@@ -44,7 +44,7 @@ const Spins = {
     },
 
     findUserId: (user_id, callback) => {
-        pool.query('SELECT * FROM spins_number WHERE user_id = ?', 
+        pool.query('SELECT * FROM spins_numbers WHERE user_id = ?', 
         [user_id], 
         (error, results, field) => {
             if(error){
@@ -66,7 +66,7 @@ const Spins = {
 
 
     getAllSpins: (callback) => {
-        pool.query('SELECT * FROM spins_number',
+        pool.query('SELECT * FROM spins_numbers',
         (error, results, field) => {
             if(error){
             return callback(error);

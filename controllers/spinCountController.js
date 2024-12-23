@@ -26,26 +26,26 @@ exports.createSpins = async (req, res) => {
     const body = req.body;
     // body.identifier = v4();
   
-    findUserId(body.user_id, (error, results) => {
-      if(results.length){
-        let data = results[0];
-        updateSpin(data, (err, resu) => {
-          if(err){
-              console.log(err);
-              return res.status(500).json({
-                success: 0,
-                message: "There was an error!"
-              });
-          }
-          return res.status(200).json({
-            success: 1,
-            data: resu,
-            message: "Your spin been recorded and added!"
-          });
+    // findUserId(body.user_id, (error, results) => {
+    //   if(results.length){
+    //     let data = results[0];
+    //     updateSpin(data, (err, resu) => {
+    //       if(err){
+    //           console.log(err);
+    //           return res.status(500).json({
+    //             success: 0,
+    //             message: "There was an error!"
+    //           });
+    //       }
+    //       return res.status(200).json({
+    //         success: 1,
+    //         data: resu,
+    //         message: "Your spin been recorded and added!"
+    //       });
   
-        })
-      }
-      else{
+    //     })
+    //   }
+    //   else{
         createSpins(req, (error, results) => {
           if(error){
               console.log(error);
@@ -59,8 +59,8 @@ exports.createSpins = async (req, res) => {
             data: results,
             message: "Your spin has been recorded!"
           });
-      });
-      }
+      // });
+      // }
     });
     
 }

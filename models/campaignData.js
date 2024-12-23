@@ -3,13 +3,13 @@ const pool = require("../config/db");
 
 const campaignData = {
     createVisit: (req, callback) => {
-        const { camp_id } = req.body;
+        const { camp_id, email } = req.body;
         
         pool.query(
           `insert into campaign_data
-            (camp_id, number)
-            values(?,?)`,
-            [camp_id, 1],
+            (camp_id, email, number)
+            values(?,?,?)`,
+            [camp_id, email, 1],
             (error, results, fields) => {
               if(error){
                 return callback(error);
@@ -23,15 +23,15 @@ const campaignData = {
     updateVisit: (data, callback) => {
         const {
             camp_id,
-            number
+            number,
         } = data;
+        const email = data.email ? data.email : "";
         pool.query(
-        `update campaign_data set
-            number=?
-            where camp_id=?`,
+        "update campaign_data set number=?, email=? where camp_id=?",
             [
             Number(number) + 1,
-            camp_id
+            email,
+            camp_id,
             ],
             (error, results, field) => {
             if(error){

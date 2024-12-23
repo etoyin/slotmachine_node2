@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Spins UI</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            background-color: purple; /* Starting with purple background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .container {
+            position: relative; /* for absolute positioning of the frame */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .frame {
+           position: relative; /* Needed for placing content inside the frame properly*/
+            background-color: white; /* White Background for the Frame*/
+            border: 2px solid purple;
+            padding: 40px; /* to add space around content */
+            text-align: center;
+            border-radius: 10px;
+        }
+        
+        .gift {
+             position: absolute;
+             top: -30px;
+             left: 50%;
+             transform: translateX(-50%);
+             width: 80px; /* adjust as needed */
+             height: 80px; /* adjust as needed */
+             background-size: contain;
+             background-repeat: no-repeat;
+             background-position: center;
+             background-image: url('gift_image.png'); /* Replace with your gift image URL */
+        }
+        .congrats {
+            color: green;
+            margin-bottom: 10px;
+        }
+        .message {
+            font-size: 1.2rem; /* Adjusted size*/
+            margin-bottom: 20px;
+        }
+        .highlight {
+            font-weight: bold;
+            color: purple;
+            font-size: 1.3rem;
+        }
+        
+        .button {
+            background-color: #007bff;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px; /* Making it a rounded button */
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="frame">
+           <div class="gift">
+           </div>
+            <h1 class="congrats">CONGRATULATIONS!</h1>
+            <p class="message">You've received<br> <span class="highlight">2 FREE SPINS TODAY!</span></p>
+            <button class="button">Click Here to Play</button>
+        </div>
+    </div>
+</body>
+</html>

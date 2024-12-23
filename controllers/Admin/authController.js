@@ -15,7 +15,6 @@ const { create, findByEmail } = require('../../models/Admin/user');
 // const {createVisits} =  require('../models/user');
 
 exports.login_page = async (req, res) => {
-
   let token = req.cookies.admin;
   if(token){
     verify(token, process.env.JWT_SECRET, (error, decoded) => {
@@ -127,6 +126,12 @@ exports.createUser = async (req, res) => {
   
   
   
+}
+
+
+exports.logout = (req, res) => {
+  res.clearCookie('admin');
+  return res.redirect('/admin_login');
 }
 
 

@@ -4,6 +4,7 @@
 // const { findUserId, updateVisit, createVisits } = require('../models/credit_card');
 const { sign, verify } = require("jsonwebtoken");
 const { getAllEmailClicks, findUserId, updateVisit, createVisits } = require('../models/email_verify');
+const { updateVerified } = require("../models/user");
 
 
 
@@ -26,15 +27,29 @@ exports.verify_email = async (req, res) => {
             });
         }
 
+        updateVerified(id, (error, results) => {
+          console.log(error);
+          
+          if(error){
+              res.render('email_verified.ejs', {
+                  title: 'Slotgame | Verify Email',
+                  message: 'Erro with updating db!',
+                  success: false
+              });
+          }
+          else{
+            const token = sign({ email: email}, process.env.JWT_SECRET,{});
+            res.cookie('auth',token);
+            res.render('email_verified.ejs', {
+                title: 'Slotgame | Verify Email',
+                message: 'You are verified',
+                success: true,
+                data: id
+            });
+          }
+        })
         
-        const token = sign({ email: email}, process.env.JWT_SECRET,{});
-        res.cookie('auth',token);
-        res.render('email_verified.ejs', {
-            title: 'Slotgame | Verify Email',
-            message: 'You are verified',
-            success: true,
-            data: id
-        });
+        
     });
 }
 
@@ -61,26 +76,26 @@ exports.createEmailClicks = async (req, res) => {
     // body.identifier = v4();
     
   
-    findUserId(body.user_id, (error, results) => {
-      if(results && results.length){
-        let data = results[0];
-        updateVisit(data, (err, resu) => {
-          if(err){
-              console.log(err);
-              return res.status(500).json({
-                success: 0,
-                message: "There was an error!"
-              });
-          }
-          return res.status(200).json({
-            success: 1,
-            data: resu,
-            message: "Your Visit has been recorded and added!"
-          });
+    // findUserId(body.user_id, (error, results) => {
+    //   if(results && results.length){
+    //     let data = results[0];
+    //     updateVisit(data, (err, resu) => {
+    //       if(err){
+    //           console.log(err);
+    //           return res.status(500).json({
+    //             success: 0,
+    //             message: "There was an error!"
+    //           });
+    //       }
+    //       return res.status(200).json({
+    //         success: 1,
+    //         data: resu,
+    //         message: "Your Visit has been recorded and added!"
+    //       });
   
-        })
-      }
-      else{
+    //     })
+    //   }
+    //   else{
         createVisits(req, (error, results) => {
           if(error){
               console.log(error);
@@ -95,8 +110,8 @@ exports.createEmailClicks = async (req, res) => {
             message: "Your visit has been recorded!"
           });
       });
-      }
-    });
+    //   }
+    // });
     
 }
   
