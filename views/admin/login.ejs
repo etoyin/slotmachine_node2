@@ -27,7 +27,7 @@
         $(document).ready(function() {
             $('#loginForm').on('submit', function(e) {
                 e.preventDefault();
-                axios.post('/admin_register', {
+                axios.post('/login', {
                     email: $("#username").val(),
                     password: $("#password").val(),
                 })
