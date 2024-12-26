@@ -78,7 +78,7 @@ async function getUsersWithSpins() {
             },
             {
                 model: Campaign,
-                attributes: ['id', 'email', 'camp_id', 'number']
+                attributes: ['id', 'user_id', 'email', 'camp_id', 'number']
             }
         ]
     });

@@ -78,42 +78,21 @@ exports.landing = (req, res) => {
 
   let reqq = {
     body:{
-      email: req.query.email,
+      email: req.query.email ? req.query.email: "",
       camp_id: req.query.camp
     }
   };
   let errorCheck = false;
-  if(req.query.camp){
-    findCampId(req.query.camp, (error, results) => {
-      if(results && results.length){
-        let data = results[0];
-        if(req.query.email){
-          data.email = req.query.email
-        }
-        updateVisit(data, (err, resu) => {
-          if(err){
-              errorCheck = true;
-              console.log(err);
-              return res.status(500).json({
-                success: 0,
-                message: "There was an error!"
-              });
-          } 
-        })
+  if(req.query.camp){    
+    createVisit(reqq, (error, results) => {
+      if(error){
+          errorCheck = true;
+          console.log(error);
+          return res.status(500).json({
+            success: 0,
+            message: "Database connection error"
+          });
       }
-      else{
-        createVisit(reqq, (error, results) => {
-          if(error){
-              errorCheck = true;
-              console.log(error);
-              return res.status(500).json({
-                success: 0,
-                message: "Database connection error"
-              });
-          }
-      });
-      }
-  
     });  
     if(errorCheck) {
       return
@@ -123,12 +102,34 @@ exports.landing = (req, res) => {
   if(req.query.email){
     User.findByEmail(req.query.email, (error, results) => {
       if(results && results.length){
-        console.log("ëmail found");
-        const token = sign({ email: reqq.body.email}, process.env.JWT_SECRET,{});
-        res.cookie('auth',token);
+        console.log("ëmail found", results[0].id);
+
+        if(req.query.camp){
+          updateCampData(results[0].id, results[0].email, (error, resu) => {
+            if(error){
+              console.log(error);
+              res.redirect('/');
+              
+            }
+            else{
+              console.log(resu);
+              const token = sign({ email: reqq.body.email}, process.env.JWT_SECRET,{});
+              res.cookie('auth',token);
+              res.redirect('/home?id='+results[0].id);
+            }
+          })
+        }
+        else{
+          const token = sign({ email: reqq.body.email}, process.env.JWT_SECRET,{});
+          res.cookie('auth',token);
+          res.redirect('/home?id='+results[0].id);
+        }
+        
+        // const token = sign({ email: reqq.body.email}, process.env.JWT_SECRET,{});
+        // res.cookie('auth',token);
         // console.log('got here!');
         
-        res.redirect('/home?id='+results[0].id);
+        // res.redirect('/home?id='+results[0].id);
         
       }
       else{
@@ -168,7 +169,7 @@ exports.landing = (req, res) => {
 };
 
 const nodemailer = require('nodemailer');
-const { findCampId, updateVisit, createVisit } = require('../models/campaignData');
+const { findCampId, updateVisit, createVisit, updateCampData } = require('../models/campaignData');
 async function sendVerificationEmail(email, token, id) {
   const transporter = nodemailer.createTransport({
     host: process.env.MAIL_HOST,
@@ -291,10 +292,21 @@ exports.createUserFromAd = async (req, res) => {
             });
           }
 
-          sendVerificationEmail(body.email, token_email, results.insertId);
-          const token = sign({ email: body.email}, process.env.JWT_SECRET,{});
-          res.cookie('auth',token);
-          res.redirect('/home?id='+results.insertId)
+          updateCampData(results.insertId, body.email, (error, resuu)=> {
+            if(error){
+              console.log(error);
+              return res.status(500).json({
+              success: 0,
+              message: "Campaign data update error!"
+              });
+            }
+            else{
+              sendVerificationEmail(body.email, token_email, results.insertId);
+              const token = sign({ email: body.email}, process.env.JWT_SECRET,{});
+              res.cookie('auth',token);
+              res.redirect('/home?id='+results.insertId)
+            }
+          })
       });
   });
   

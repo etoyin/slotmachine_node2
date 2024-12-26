@@ -15,6 +15,13 @@ const Campaign = sequelize.define('campaign_data', {
     primaryKey: true,
     autoIncrement: true
   },
+  user_id: {
+    type: Sequelize.STRING,
+    references: {
+        model: User_Data,
+        key: 'id'
+    }
+  },
   camp_id: {
     type: Sequelize.STRING,
     unique: true

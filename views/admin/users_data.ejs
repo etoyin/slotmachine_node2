@@ -3,7 +3,7 @@
     <div class="p-4 mb-5 bg-gray-200">
         <p class="text-xl font-bold text-center text-gray-600 sm:texl-3xl">User Data</p>
     </div>
-    <table class="min-w-full bg-white border border-gray-200">
+    <table id="user_data" class="min-w-full bg-white border border-gray-200">
         <thead>
             <tr class="w-full text-sm leading-normal text-gray-600 uppercase bg-gray-200">
                 <th class="px-6 py-3 text-left">ID</th>
@@ -12,6 +12,7 @@
                 <th class="px-6 py-3 text-left">Daily Email Clicks</th>
                 <th class="px-6 py-3 text-left">Verification Email Clicks</th>
                 <th class="px-6 py-3 text-left">Spin Count</th>
+                <th class="px-6 py-3 text-left">Campaign Data</th>
             </tr>
         </thead>
         <tbody class="text-sm font-light text-gray-600">
@@ -27,9 +28,10 @@
                             <button class="btn btn-warning">Not Verified</button>
                           <% } %>
                     </td>
-                    <td class="px-6 py-3"><%= user.daily_email_clicks.length ? user.daily_email_clicks[0].number : '0' %></td>
-                    <td class="px-6 py-3"><%= user.email_verification_clicks.length ? user.email_verification_clicks[0].number : '0' %></td>
-                    <td class="px-6 py-3"><%= user.spins_numbers.length ? user.spins_numbers[0].number : '0' %></td>
+                    <td class="px-6 py-3"><%= user.daily_email_clicks.length ? user.daily_email_clicks.length : '0' %></td>
+                    <td class="px-6 py-3"><%= user.email_verification_clicks.length ? user.email_verification_clicks.length : '0' %></td>
+                    <td class="px-6 py-3"><%= user.spins_numbers.length ? user.spins_numbers.length : '0' %></td>
+                    <td class="px-6 py-3"><%= user.campaign_data.length ? user.campaign_data.length : '0' %></td>
                     
                 </tr>
             <% }); %>
@@ -37,5 +39,9 @@
             <!-- Add more rows as needed -->
         </tbody>
     </table>
+
+    <div class="flex gap-3 mt-5">
+        <button class="p-2 text-sm font-semibold text-white uppercase bg-blue-600" onclick="exportToCSV()">Export to CSV</button>
+    </div>
 </div>
 <%- include ('partials/footer.ejs') %>

@@ -20,18 +20,13 @@ const campaignData = {
             }
           )
     },
-    updateVisit: (data, callback) => {
-        const {
-            camp_id,
-            number,
-        } = data;
-        const email = data.email ? data.email : "";
+    updateCampData: (id, email, callback) => {
+        
         pool.query(
-        "update campaign_data set number=?, email=? where camp_id=?",
+        "update campaign_data set user_id=? where email=? and user_id is null",
             [
-            Number(number) + 1,
-            email,
-            camp_id,
+            id,
+            email
             ],
             (error, results, field) => {
             if(error){

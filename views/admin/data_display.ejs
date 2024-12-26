@@ -21,9 +21,12 @@
     <div class="">
         <canvas width=100 id="myChart"></canvas>
     </div>
+    <div class="flex gap-3 mt-5">
+        <button class="p-2 text-sm font-semibold text-white uppercase bg-blue-600" id="export">Export to CSV</button>
+    </div>
 </div>
 <script>
-    
+
     function formatDate(dateString) {
         try {
           const dateObj = new Date(dateString);
@@ -54,6 +57,8 @@
     let data = <%- JSON.stringify(data) %>;
     let label = <%- JSON.stringify(label) %>;
     let search_url = <%- JSON.stringify(search_url) %>;
+    let he = <%-JSON.stringify(heading)%>;
+
     const ctx = document.getElementById('myChart');
     
     function fillMissingDates(dateObject, start, end) {
@@ -96,7 +101,7 @@
         values.push(value)
     });
 
-    new Chart(ctx, {
+    const myChart = new Chart(ctx, {
         type: 'bar',
         data: {
         labels: keys,
@@ -134,6 +139,9 @@
                dateObj.getDate() === day;
     }
     $(document).ready(function(){
+        $("#export").click(function(){
+            exportMetricsCSV(he);
+        })
         $("#submit").click(function(e){
             e.preventDefault();
             let start = $("#start").val();

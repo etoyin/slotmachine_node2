@@ -10,6 +10,7 @@ const { getAllSpins, getAllSpinsByDate, getAllSpinsLast7Days } = require('../con
 const { getAllGamePageVisitsLast7Days, getAllGamePageVisitsByDate } = require('../controllers/Admin/GamePageController');
 const { getAllDailyEmailClicksLast7Days, getAllDailyEmailClicksByDate } = require('../controllers/Admin/DailyEmailController');
 const { getAllVerifiedEmailClicksLast7Days, getAllVerifiedEmailClicksByDate } = require('../controllers/Admin/Verified_email_clicks');
+const { getAllCampaignDataLast7Days, getAllCampaignDataByDate } = require('../controllers/Admin/TrafficSourceData');
 
 
 
@@ -32,6 +33,9 @@ router.get('/search_daily_email_clicks', checkAdminToken, getAllDailyEmailClicks
 
 router.get('/verified_email_clicks', checkAdminToken, getAllVerifiedEmailClicksLast7Days);
 router.get('/search_verified_email_clicks', checkAdminToken, getAllVerifiedEmailClicksByDate);
+
+router.get('/traffic_source', checkAdminToken, getAllCampaignDataLast7Days);
+router.get('/search_campaign_data', checkAdminToken, getAllCampaignDataByDate);
 
 
 module.exports = router;

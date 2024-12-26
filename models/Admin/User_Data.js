@@ -48,8 +48,8 @@ User_Data.sync()
     console.error('Error creating User table:', error);
   });
 
-User_Data.hasMany(Campaign, { foreignKey: 'email' });
-Campaign.belongsTo(User_Data, { foreignKey: 'email' });
+User_Data.hasMany(Campaign, { foreignKey: 'user_id' });
+Campaign.belongsTo(User_Data, { foreignKey: 'user_id' });
 
 User_Data.hasMany(Spin, { foreignKey: 'user_id' });
 Spin.belongsTo(User_Data, { foreignKey: 'user_id' });
