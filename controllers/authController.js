@@ -213,7 +213,7 @@ async function sendVerificationEmail(email, token, id) {
   })
 }
 
-exports.createUser = async (req, res) => {
+exports.createUse = async (req, res) => {
   const body = req.body;
 
   const token_email = sign({ email: body.email}, process.env.JWT_SECRET,{expiresIn: '1d'});
@@ -223,8 +223,8 @@ exports.createUser = async (req, res) => {
     if(error){
       console.log(error);
       return res.status(500).json({
-      success: 0,
-      message: "Database connection error finding email!"
+        success: 0,
+        message: "Database connection error finding email!"
       });
     }else{
       if(ress && ress[0] && ress[0].email){
