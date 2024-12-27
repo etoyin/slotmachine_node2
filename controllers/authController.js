@@ -59,7 +59,7 @@ exports.createVisits = async (req, res) => {
             console.log(error);
             return res.status(500).json({
               success: 0,
-              message: "Database connection error"
+              message: "Database connection error 3"
             });
         }
         return res.status(200).json({
@@ -90,7 +90,7 @@ exports.landing = (req, res) => {
           console.log(error);
           return res.status(500).json({
             success: 0,
-            message: "Database connection error"
+            message: "Database connection error 4"
           });
       }
     });  
@@ -304,7 +304,7 @@ exports.createUserFromAd = async (req, res) => {
           console.log(error);
           return res.status(500).json({
           success: 0,
-          message: "Database connection error"
+          message: "Database connection error 1"
           });
       }
 
@@ -313,7 +313,7 @@ exports.createUserFromAd = async (req, res) => {
             console.log(error);
             return res.status(500).json({
             success: 0,
-            message: "Database connection error"
+            message: "Database connection error 2"
             });
           }
 
