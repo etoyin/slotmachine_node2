@@ -219,45 +219,70 @@ exports.createUser = async (req, res) => {
   const token_email = sign({ email: body.email}, process.env.JWT_SECRET,{expiresIn: '1d'});
   body.token_email = token_email;
 
-  
-  create(body, (error, results) => {
-      if(error){
-          console.log(error);
-          return res.status(500).json({
-          success: 0,
-          message: "Database connection error"
-          });
-      }
-
-      User.createGameProfile(results.insertId, (error, results_) => {
-          if(error){
-            console.log(error);
-            return res.status(500).json({
-            success: 0,
-            message: "Database connection error"
-            });
-          }
-
-          sendVerificationEmail(body.email, token_email, results.insertId);
-          const token = sign({ email: body.email}, process.env.JWT_SECRET,{});
-          res.cookie('auth',token);
-          return res.status(200).json({
-            success: 1,
-            data: results,
-            message: "Registration Successful"
-          });
+  User.findByEmail(body.email, (error, ress) => {
+    if(error){
+      console.log(error);
+      return res.status(500).json({
+      success: 0,
+      message: "Database connection error"
       });
-
+    }else{
+      if(ress && ress[0] && ress[0].email){
+        console.log(ress);
+        const token = sign({ email: body.email}, process.env.JWT_SECRET,{});
+        res.cookie('auth', token);
+        let data = {
+          insertId: ress[0].id
+        }
+        return res.status(200).json({
+          success: 1,
+          data,
+          message: "Login Successful"
+        });
+      }
+      else{
+        create(body, (error, results) => {
+          if(error){
+              console.log(error);
+              return res.status(500).json({
+              success: 0,
+              message: "Database connection error"
+              });
+          }
+    
+          User.createGameProfile(results.insertId, (error, results_) => {
+              if(error){
+                console.log(error);
+                return res.status(500).json({
+                success: 0,
+                message: "Database connection error"
+                });
+              }
+    
+              sendVerificationEmail(body.email, token_email, results.insertId);
+              const token = sign({ email: body.email}, process.env.JWT_SECRET,{});
+              res.cookie('auth',token);
+              return res.status(200).json({
+                success: 1,
+                data: results,
+                message: "Registration Successful"
+              });
+          });
+    
+          
+    
+      //     // res.render('index.ejs', {
+      //     //     title: 'Slotgame | Game Page',
+      //     //     success: 1,
+      //     //     message: "Login successfully",
+      //     //     genMessage: "LoggedIn",
+      //     //     token: token,
+      //     // });
+        });
+      }
       
-
-      // res.render('index.ejs', {
-      //     title: 'Slotgame | Game Page',
-      //     success: 1,
-      //     message: "Login successfully",
-      //     genMessage: "LoggedIn",
-      //     token: token,
-      // });
-  });
+    }
+  })
   
 }
 
