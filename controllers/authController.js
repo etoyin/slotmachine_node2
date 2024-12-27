@@ -213,7 +213,7 @@ async function sendVerificationEmail(email, token, id) {
   })
 }
 
-exports.createUse = async (req, res) => {
+exports.createUser = async (req, res) => {
   const body = req.body;
 
   const token_email = sign({ email: body.email}, process.env.JWT_SECRET,{expiresIn: '1d'});
