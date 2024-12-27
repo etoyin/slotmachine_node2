@@ -224,7 +224,7 @@ exports.createUser = async (req, res) => {
       console.log(error);
       return res.status(500).json({
       success: 0,
-      message: "Database connection error"
+      message: "Database connection error finding email!"
       });
     }else{
       if(ress && ress[0] && ress[0].email){
@@ -246,7 +246,7 @@ exports.createUser = async (req, res) => {
               console.log(error);
               return res.status(500).json({
               success: 0,
-              message: "Database connection error"
+              message: "Database connection error Creating email"
               });
           }
     
