@@ -58,6 +58,7 @@ exports.login = (req, res) => {
         success: 0,
         message: "Username does not exist!"
       });
+      
     }
     const passwordCorrect = bcrypt.compareSync(body.password, results[0].password);
    
