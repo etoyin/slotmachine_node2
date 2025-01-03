@@ -1,0 +1,77 @@
+<form id="payment-form">
+    <div id="unified-checkout">
+     <!--HyperLoader injects the Unified Checkout-->
+    </div>
+    <button id="submit">
+      <div class="hidden spinner" id="spinner"></div>
+      <span id="button-text">Pay now</span>
+    </button>
+    <div id="payment-message" class="hidden"></div>
+</form>
+
+<!-- <script src="https://beta.hyperswitch.io/v1/HyperLoader.js"></script> -->
+
+<script src="https://beta.hyperswitch.io/v1/HyperLoader.js"></script>;
+<script>
+    // Fetches a payment intent and captures the client secret
+async function initialize() {
+    const response = await fetch("/create-payment", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ items: [{ id: "xl-tshirt" }], country: "US" }),
+    });
+    const { clientSecret } = await response.json();
+  
+    const appearance = {
+      theme: "midnight",
+    };
+  
+    widgets = hyper.widgets({ appearance, clientSecret });
+  
+    const expressCheckoutOptions = {
+      wallets: {
+        walletReturnUrl: "https://example.com/complete",
+        //Mandatory parameter for Wallet Flows such as Googlepay, Paypal and Applepay
+      },
+    };
+  
+    const expressCheckout = widgets.create("expressCheckout", expressCheckoutOptions);
+    expressCheckout.mount("#express-checkout");
+  }
+
+  async function handleSubmit(e) {
+    setMessage("");
+    e.preventDefault();
+  
+    if (!hyper || !widgets) {
+      return;
+    }
+    setIsLoading(true);
+  
+    const { error, status } = await hyper.confirmPayment({
+      widgets,
+      confirmParams: {
+        // Make sure to change this to your payment completion page
+        return_url: "https://example.com/complete",
+      },
+      redirect: "always", // if you wish to redirect always, otherwise it is defaulted to "if_required"
+    });
+  
+    if (error) {
+      if (error.type === "card_error" || error.type === "validation_error") {
+        setMessage(error.message);
+      } else {
+        if (error.message) {
+          setMessage(error.message);
+        } else {
+          setMessage("An unexpected error occurred.");
+        }
+      }
+    }
+    if (status) {
+      handlePaymentStatus(status); //handle payment status
+    }
+    
+    setIsLoading(false);
+  }
+</script>

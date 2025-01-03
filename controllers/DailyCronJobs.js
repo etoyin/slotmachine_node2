@@ -1,8 +1,13 @@
 const { sign } = require("jsonwebtoken");
 const { scheduleJob } = require("node-schedule");
+const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const { getAllUsers } = require("../models/user");
 const ejs = require("ejs");
+const User_profile = require("../models/Admin/User_profile");
+const Link = require("../models/Admin/Daily_Email_Link");
+const Daily_Link = require("../models/Admin/Daily_Email_Link");
+const { Op } = require("sequelize");
 
 require('dotenv').config();
 
@@ -27,7 +32,16 @@ async function sendVerificationEmail(email, id) {
     }
   });
 
-  let url = base_url+'/three_spins_win?email='+email+"&id="+id;
+  const token = crypto.randomBytes(32).toString('hex');
+  const expiresAt = new Date();
+  expiresAt.setHours(expiresAt.getHours() + 24); // Link expires in 24 hours
+
+  const newLink = await Link.create({
+        user_id: id,
+        token: token,
+        expiresAt: expiresAt,
+      });
+  let url = base_url+'/three_spins_win?email='+email+"&id="+id+"&token="+token;
 
 
 
@@ -66,7 +80,7 @@ async function sendVerificationEmail(email, id) {
 
 
 scheduleJob('0 9,18 * * *', ()=>{ //, '0 9,18 * * *' '* * * * *'
-    getAllUsers((error, results) => {
+    getAllUsers(async (error, results) => {
         if(error){
             console.log(error);
             return res.status(500).json({
@@ -74,17 +88,21 @@ scheduleJob('0 9,18 * * *', ()=>{ //, '0 9,18 * * *' '* * * * *'
                 message: "There was an error, getting all!"
             });
         }
-        // return res.status(200).json({
-        //     success: 1,
-        //     data: results,
-        //     message: "Successfull!"
-        // });
 
         console.log(results);
-        results.forEach(element => {
+        results.forEach(async(element) => {
             console.log(element);
-            
             sendVerificationEmail(element.email, element.id);
         });
+
+        const now = new Date(); 
+        let deletedLinks = await Daily_Link.destroy({
+          where: {
+            expiresAt: {
+                [Op.lt]: now,
+            },
+          },
+        });
+        console.log(`Deleted ${deletedLinks} expired links`);
     })
 });

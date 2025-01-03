@@ -1,3 +1,15 @@
+
+
+// .then(res => {
+//     console.log(res);
+//     $("#balance").text(
+//         res.data[0].balance ? res.data[0].balance : 0
+//     )
+// })
+// .catch(error => {
+//     console.error('Error tracking visit:', error);
+// });
+
 // 3x5 20 lines, line buttons modern
 var slotConfig_3x5 = {
     symbolSizeY: 180,
@@ -31,8 +43,10 @@ var slotConfig_3x5 = {
     useWildInFirstPosition: false,              // substitute of the first symbol not allowed
     useLineBetMultiplier: true,                 // win multiplied by bet
     useLineBetFreeSpinMultiplier: false,        // free spins win multiplied by bet
-    defaultCoins: window.balance, 
-    // defaultCoins:20,                      // default player credit 100 000
+    // gamer_data.data[0].balance ? gamer_data.data[0].balance : 0
+    // defaultCoins: window.balance, 
+    defaultCoins: 20,  // default player credit 100 000
+    // defaultCoins:gamer_data.data[0].balance ? gamer_data.data[0].balance : 0,                     
 
     localOffsetX: 0,                            // x offset from center for all scene objects
     localOffsetY: 70,                           // y offset from center for all scene objects

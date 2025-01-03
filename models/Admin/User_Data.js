@@ -7,6 +7,8 @@ const Fundpage = require('./FundPage');
 const EmailVerification = require('./EmailVerification');
 const DailyEmail = require('./DailyEmail');
 const CreditCard = require('./CreditCard');
+const Transaction = require('../Transaction');
+const User_profile = require('./User_profile');
 
 
 const sequelize = new Sequelize(process.env.MYSQL_DB, process.env.DB_USER, process.env.DB_PASSWORD, {
@@ -17,24 +19,24 @@ const sequelize = new Sequelize(process.env.MYSQL_DB, process.env.DB_USER, proce
 // Define a model
 const User_Data = sequelize.define('users', {
   id: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
   password: {
-    type: Sequelize.STRING,
+    type: Sequelize.DataTypes.STRING,
     default: null
   },
   email: {
-    type: Sequelize.STRING,
+    type: Sequelize.DataTypes.STRING,
     unique: true
   },
   verified: {
-    type: Sequelize.BOOLEAN,
+    type: Sequelize.DataTypes.BOOLEAN,
     default: false
   },
   verify_token: {
-    type: Sequelize.STRING,
+    type: Sequelize.DataTypes.STRING,
     default: null
   }
 });
@@ -69,4 +71,7 @@ DailyEmail.belongsTo(User_Data, { foreignKey: 'user_id' });
 User_Data.hasMany(CreditCard, { foreignKey: 'user_id' });
 CreditCard.belongsTo(User_Data, { foreignKey: 'user_id' });
 
-  module.exports = User_Data
+// User_Data.hasOne(User_profile, { foreignKey: 'user_id' });
+// User_profile.belongsTo(User_Data, { foreignKey: 'user_id' });
+
+module.exports = User_Data

@@ -2,6 +2,32 @@
 let slotGame;
 let slotConfig;
 let coinSpinAnim;
+
+// ======================================================================
+let player_balance;
+let user_id = localStorage.getItem('user_id');
+
+let fnc_gamer_data = async() => {
+  player_balance = await fetch('/get_wallet_balance', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        user_id
+    })
+  })
+  .then(response => {
+    // Handle the response, if necessary
+    return response.json();
+  })
+  .then(res => res.data[0].balance);
+  
+}
+
+fnc_gamer_data();
+// ===========================================================
+
 // window loads event
 window.onload = function async () {
   let user_id = localStorage.getItem('user_id');
@@ -346,7 +372,8 @@ class SlotGame extends Phaser.Scene {
 
     // 4) main objects
     // this.slotPlayer = new SlotPlayer(slotConfig.defaultCoins); // default coins
-    this.slotPlayer = new SlotPlayer(window.balance); 
+    this.slotPlayer = new SlotPlayer(player_balance); // default coins
+    // this.slotPlayer = new SlotPlayer(window.balance); 
     this.reels = slotConfig.createReels(this);
     this.lineButtons = slotConfig.createLineButtons
       ? slotConfig.createLineButtons(this)
@@ -522,7 +549,7 @@ class SlotGame extends Phaser.Scene {
     this.spinCount++;
     let vv = localStorage.getItem('user_id');
 
-    // this is where the spin cunt is recorded!
+    // this is where the spin count is recorded!
     fetch('/spin_count', {
         method: 'POST',
         headers: {

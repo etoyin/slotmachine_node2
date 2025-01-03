@@ -24,6 +24,7 @@ function exportMetricsCSV(heading) {
      const row = [labels[i], ...datasets.map(dataset => dataset.data[i])].join(',')
      rows.push(row);
   }
+
     const csvData = rows.join('\n');
     const now = new Date();
     const formatted_date =  `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`
@@ -43,3 +44,4 @@ function downloadFile(data, filename, type) {
      document.body.removeChild(a);
      URL.revokeObjectURL(url);
 }
+

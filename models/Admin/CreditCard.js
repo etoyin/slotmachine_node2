@@ -17,7 +17,7 @@ const CreditCard = sequelize.define('credit_card_page_visits', {
     autoIncrement: true
   },
   user_id: {
-    type: Sequelize.STRING,
+    type: Sequelize.INTEGER,
     references: {
         model: User_Data,
         key: 'id'

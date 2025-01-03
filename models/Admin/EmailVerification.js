@@ -17,7 +17,7 @@ const EmailVerification = sequelize.define('email_verification_clicks', {
     autoIncrement: true
   },
   user_id: {
-    type: Sequelize.STRING,
+    type: Sequelize.INTEGER,
     references: {
         model: User_Data,
         key: 'id'

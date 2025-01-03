@@ -1283,7 +1283,30 @@ class SlotPlayer{
         let balance = this.coins + count
         console.log("game Coins ",this.coins + count);
         this.setCoinsCount(this.coins + count);
-        window.setBalance(balance)
+        window.setBalance(balance);
+
+        // this where i will add my coin update to the database
+        // ADESINA OLUWATOYIN
+        let user_id = localStorage.getItem('user_id');
+        fetch('/update_coins', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                user_id, balance
+            })
+        })
+        .then(response => {
+            // Handle the response, if necessary
+            return response.json();
+        })
+        .then(res => {
+            console.log(res);
+        })
+        .catch(error => {
+            console.error('Error tracking visit:', error);
+        });
 
     }
 

@@ -9,6 +9,13 @@ var cookieParser = require('cookie-parser')
 
 require("./controllers/DailyCronJobs");
 
+// replace the test api key with your api publishable key
+
+app.set('views', __dirname + '/views'); // set express to look in this folder to render our view
+app.set('view engine', 'ejs'); // configure template engine
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json()); // parse form data client
+
 
 app.use(express.json());
 app.use(cookieParser())
@@ -33,10 +40,6 @@ app.listen(port, () => {
 
 
 
-app.set('views', __dirname + '/views'); // set express to look in this folder to render our view
-app.set('view engine', 'ejs'); // configure template engine
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json()); // parse form data client
 app.use(express.static(path.join(__dirname, 'public'), {
   setHeaders: (res, path) => {
     if (path.endsWith('.css')) {

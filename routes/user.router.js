@@ -3,12 +3,14 @@ const router = express.Router();
 const userController = require('../controllers/userController');
 
 const { checkToken } = require("../auth/token_validation");
-const { createSpins, getAllSpins } = require('../controllers/spinCountController');
+const { createSpins, getAllSpins, updateCoin } = require('../controllers/spinCountController');
 const { createVisits, getAllVisits } = require('../controllers/gamePageVisitsController');
 const { viewPage, createFundVisits, getWalletBalance } = require('../controllers/fundPageController');
 const { viewCreditCardPage, createCreditVisits } = require('../controllers/credit_cardController');
 const { viewEmail, verify_email, createEmailClicks } = require('../controllers/emailCountController');
 const { createDailyEmailClicks } = require('../controllers/dailyEmailCountController');
+const { getPaymentParam, paymentIntent, completion } = require('../controllers/managePaymentController');
+const { createTransactions } = require('../controllers/transactionsController');
 
 router.get('/home', checkToken, userController.home);
 router.get('/users', userController.getAllUsers);
@@ -29,5 +31,12 @@ router.get('/verify-email', verify_email);
 router.post('/email_clicks', checkToken, createEmailClicks );
 
 router.get('/three_spins_win', checkToken, createDailyEmailClicks );
+router.post('/payment_page', checkToken,  getPaymentParam);
+router.post('/call_payment_intent', checkToken,  paymentIntent);
+router.get('/completion', checkToken, completion);
+// 
+router.post('/register_transaction', checkToken,  createTransactions);
+router.post('/update_coins', checkToken,  updateCoin);
+
 
 module.exports = router;

@@ -1,8 +1,36 @@
 // const bcrypt = require('bcryptjs');
 // const jwt = require('jsonwebtoken');
+const User_profile = require('../models/Admin/User_profile');
 const { findUserId, updateSpin, createSpins, getAllSpins } = require('../models/spinsCount');
 const User = require('../models/user');
 require('dotenv').config();
+
+exports.updateCoin = async (req, res) => {
+  const body = req.body;
+  try {
+  
+    let user_profile = await User_profile.findOne({
+      where:{
+        user_id: body.user_id,
+      }
+    });
+  
+    
+    if(user_profile){
+        user_profile.balance = body.balance;
+        // console.log(Number(body.amount));
+        
+        await user_profile.save();
+    }
+    return res.json({
+        status: 200,
+        message: "remaining coin has been saved!"
+    })
+  } catch (error) {
+    console.error('Error creating user:', error);
+  }
+  
+}
 
 exports.getAllSpins = async (req, res) => {
     
