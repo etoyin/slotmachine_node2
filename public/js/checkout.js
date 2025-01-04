@@ -110,7 +110,7 @@ async function checkStatus() {
   // pay_mOU1hW9OQ9BzcUCs3GUO
   switch (paymentIntent.status) {
     case "succeeded":
-      showMessage("Payment succeeded!");
+      // showMessage("Payment succeeded!");
       let user_id = localStorage.getItem('user_id');
       let res = await fetch("/register_transaction", {
         method: "post",
