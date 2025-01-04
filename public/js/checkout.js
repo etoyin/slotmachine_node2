@@ -23,6 +23,7 @@ document
 var emailAddress = document.getElementById("email");
 
 async function initialize() {
+  setLoading(true);
   const response = await fetch("/call_payment_intent", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -43,23 +44,7 @@ async function initialize() {
   document.body.style.background = backgroundColor(appearance.theme);
   elements = hyper.elements({ appearance, clientSecret });
 
-  // widgets = hyper.widgets({ appearance, clientSecret });
-
-  // const unifiedCheckoutOptions = {
-  //   layout: "tabs",
-  //   wallets: {
-  //     walletReturnUrl: "https://example.com/complete",
-      // applePay: "auto",
-      // googlePay: "auto",
-      // payPal: "auto",
-      // klarna: "never",
-      //Mandatory parameter for Wallet Flows such as Googlepay, Paypal and Applepay
-  //   },
-  // };
-
-  // const unifiedCheckout = widgets.create("payment", unifiedCheckoutOptions);
-  // unifiedCheckout.mount("#payment-element");
-
+  
   const paymentElementOptions = {
     layout: "tabs",
     // paymentMethodOrder: ["card", "ideal", "sepaDebit", "sofort"],
@@ -77,9 +62,11 @@ async function initialize() {
       },
     },
   };
+  
 
   const paymentElement = elements.create("payment", paymentElementOptions);
   paymentElement.mount("#payment-element");
+  setLoading(false);
 }
 
 async function handleSubmit(e) {
