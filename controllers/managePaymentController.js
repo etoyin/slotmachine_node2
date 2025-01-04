@@ -17,15 +17,21 @@ exports.getPaymentParam = async (req, res) => {
     //     param
     // })
     res.setHeader('Content-Security-Policy', "frame-ancestors 'self' https://pay.google.com https://*.google.com");
-    res.render('payment_page', {
+    let data = {
         currency: body.currency,
         email: body.email,
         amount: Number(body.amount) * 100,
         first_name: body.first_name,
         last_name: body.last_name
-    })
+    }
+    res.redirect(303, '/payment_page/'+encodeURIComponent(JSON.stringify(data)))
 }
 
+exports.paymentPage = async (req, res) => {
+  const data = JSON.parse(decodeURIComponent(req.params.data));
+
+  res.render('payment_page',data)
+}
 exports.paymentIntent = async (req, res) => {
     const body = req.body;
 

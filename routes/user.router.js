@@ -9,7 +9,7 @@ const { viewPage, createFundVisits, getWalletBalance } = require('../controllers
 const { viewCreditCardPage, createCreditVisits } = require('../controllers/credit_cardController');
 const { viewEmail, verify_email, createEmailClicks } = require('../controllers/emailCountController');
 const { createDailyEmailClicks } = require('../controllers/dailyEmailCountController');
-const { getPaymentParam, paymentIntent, completion } = require('../controllers/managePaymentController');
+const { getPaymentParam, paymentIntent, completion, paymentPage } = require('../controllers/managePaymentController');
 const { createTransactions } = require('../controllers/transactionsController');
 
 router.get('/home', checkToken, userController.home);
@@ -31,12 +31,13 @@ router.get('/verify-email', verify_email);
 router.post('/email_clicks', checkToken, createEmailClicks );
 
 router.get('/three_spins_win', checkToken, createDailyEmailClicks );
-router.post('/payment_page', checkToken,  getPaymentParam);
+router.post('/submit_payment_page', checkToken,  getPaymentParam);
 router.post('/call_payment_intent', checkToken,  paymentIntent);
 router.get('/completion', checkToken, completion);
 // 
 router.post('/register_transaction', checkToken,  createTransactions);
 router.post('/update_coins', checkToken,  updateCoin);
+router.get('/payment_page/:data', checkToken,  paymentPage);
 
 
 module.exports = router;
