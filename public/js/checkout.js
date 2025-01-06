@@ -109,10 +109,11 @@ async function checkStatus() {
   console.log(paymentIntent);
   // pay_mOU1hW9OQ9BzcUCs3GUO
   switch (paymentIntent.status) {
+    
     case "succeeded":
       // showMessage("Payment succeeded!");
       let user_id = localStorage.getItem('user_id');
-      let res = await fetch("/register_transaction", {
+      await fetch("/register_transaction", {
         method: "post",
         headers: {
           'Content-Type': 'application/json'
@@ -124,14 +125,11 @@ async function checkStatus() {
       .then(res => res.json())
       .then(res =>{
         if(res.status == 200 || res.status == 400){
+          console.log(res);
           showMessage(res.message);
         }
       })
-      console.log(res);
 
-      
-
-      
       break;
     case "processing":
       showMessage("Your payment is processing.");
