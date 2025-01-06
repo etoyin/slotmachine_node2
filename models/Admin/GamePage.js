@@ -12,19 +12,22 @@ const sequelize = new Sequelize(process.env.MYSQL_DB, process.env.DB_USER, proce
 // Define a model
 const GamePage = sequelize.define('game_page_visits', {
   id: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
   user_id: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.DataTypes.INTEGER,
     references: {
         model: User_Data,
         key: 'id'
     }
   },
   number: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.DataTypes.INTEGER,
+  },
+  ip_address: {
+    type: Sequelize.DataTypes.STRING,
   },
 });
 

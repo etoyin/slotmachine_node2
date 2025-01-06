@@ -38,6 +38,8 @@ router.get('/completion', checkToken, completion);
 router.post('/register_transaction', checkToken,  createTransactions);
 router.post('/update_coins', checkToken,  updateCoin);
 router.get('/payment_page/:data', checkToken,  paymentPage);
+router.get('/get-one-user/:id', checkToken,  userController.getOneUser);
+
 
 
 module.exports = router;

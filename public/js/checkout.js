@@ -121,12 +121,15 @@ async function checkStatus() {
           user_id, paymentIntent
         })
       })
-      .then(res => res.json());
+      .then(res => res.json())
+      .then(res =>{
+        if(res.status == 200 || res.status == 400){
+          showMessage(res.message);
+        }
+      })
       console.log(res);
 
-      if(res.status == 200 || res.status == 400){
-        showMessage(res.message);
-      }
+      
 
       
       break;

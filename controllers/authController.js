@@ -102,9 +102,9 @@ exports.landing = (req, res) => {
   if(req.query.email){
     User.findByEmail(req.query.email, (error, results) => {
       if(results && results.length){
-        console.log("ëmail found", results[0].id);
+        console.log("email found", results[0].id);
 
-        if(req.query.camp){
+        if(req?.query?.camp){
           updateCampData(results[0].id, results[0].email, (error, resu) => {
             if(error){
               console.log(error);
@@ -125,12 +125,6 @@ exports.landing = (req, res) => {
           res.redirect('/home?id='+results[0].id);
         }
         
-        // const token = sign({ email: reqq.body.email}, process.env.JWT_SECRET,{});
-        // res.cookie('auth',token);
-        // console.log('got here!');
-        
-        // res.redirect('/home?id='+results[0].id);
-        
       }
       else{
         console.log("ëmail not found");
@@ -150,9 +144,6 @@ exports.landing = (req, res) => {
               // message: message,
               // data: ''
           });
-          // res.json({
-          //   error
-          // })
         }else{
           res.redirect('/home');
         }
@@ -236,7 +227,7 @@ exports.createUser = async (req, res) => {
         }
         return res.status(200).json({
           success: 1,
-          data,
+          results:data,
           message: "Login Successful"
         });
       }
@@ -264,7 +255,7 @@ exports.createUser = async (req, res) => {
               res.cookie('auth',token);
               return res.status(200).json({
                 success: 1,
-                data: results,
+                results,
                 message: "Registration Successful"
               });
           });
@@ -303,7 +294,7 @@ exports.createUserFromAd = async (req, res) => {
       if(error){
           console.log(error);
           return res.status(500).json({
-          success: 0,
+          success: false,
           message: "Database connection error 1"
           });
       }
@@ -312,7 +303,7 @@ exports.createUserFromAd = async (req, res) => {
           if(error){
             console.log(error);
             return res.status(500).json({
-            success: 0,
+            success: false,
             message: "Database connection error 2"
             });
           }
@@ -321,7 +312,7 @@ exports.createUserFromAd = async (req, res) => {
             if(error){
               console.log(error);
               return res.status(500).json({
-              success: 0,
+              success: false,
               message: "Campaign data update error!"
               });
             }
@@ -329,7 +320,12 @@ exports.createUserFromAd = async (req, res) => {
               sendVerificationEmail(body.email, token_email, results.insertId);
               const token = sign({ email: body.email}, process.env.JWT_SECRET,{});
               res.cookie('auth',token);
-              res.redirect('/home?id='+results.insertId)
+              // res.redirect('/home?id='+results.insertId);
+              return res.status(200).json({
+                success: 1,
+                results,
+                message: "Registration Successful"
+              });
             }
           })
       });

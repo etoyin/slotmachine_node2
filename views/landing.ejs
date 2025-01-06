@@ -8,8 +8,9 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css" integrity="sha512-vebUliqxrVkBy3gucMhClmyQP9On/HAWQdKDXRaAlb/FKuTbxkjPKUyqVOxAcGwFDka79eTF+YXwfke1h3/wfg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/forms@0.5.7/src/index.min.js"></script>
+    <!-- <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/forms@0.5.7/src/index.min.js"></script> -->
+    <link rel="stylesheet" href="/styles/output.css">
     <script src="/js/phaser.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
     <script>
@@ -43,10 +44,12 @@
         }
     
     </script>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/js/barba-fade.js"></script>
 </head>
 
-<body class="bg-[url('/png/landing.png')] bg-cover">
+<body data-barba="container" data-barba-namespace="landing_page" class="bg-[url('/png/landing.png')] bg-cover">
     <!-- remove or comment unused configs before publish -->
     <main class="absolute top-0 left-0 flex flex-col items-center justify-center w-full backdrop-blur-sm bg-black/10">
         <div class="w-full p-2 mt-20 text-center sm:w-3/4 lg:w-1/2">
@@ -69,7 +72,7 @@
                             <input required id="email" name="email" type="email" class="w-full p-2 bg-gray-600 bg-opacity-40" placeholder="Enter your email">
                         </form>
                     </div>
-                    <div id="submit" class="p-3 mt-5 capitalize bg-green-600 rounded-full cursor-pointer"> Get your free spins</div>
+                    <div id="submit" class="text-xl p-3 mt-5 font-semibold hover:font-bold capitalize bg-green-600 rounded-full cursor-pointer hover:bg-green-800"> Get your free spins</div>
                 </div>
             </div>
 
@@ -138,6 +141,7 @@
 
             $("#submit").click(function(){
                 let email = $("#email").val();
+                $(this).text("Loading...")
 
                 if(validateEmail(email)){
 
@@ -152,14 +156,16 @@
                         })
                     .then(response => response.json())
                     .then(data => {
+                        console.log(data);
                         if(data.success){
-                            localStorage.setItem('user_id', JSON.stringify(data.data.insertId));
+                            localStorage.setItem('user_id', JSON.stringify(data.results.insertId));
                             window.location.replace("/home");
                         }
                         else{
                             //window.location.replace("/");
                         }
                         console.log(data);
+                        $(this).text("Get your free spins");
                         
                     })
                     .catch(error => {
@@ -174,6 +180,7 @@
                 }
                 else{
                     alert("Incorrect email!");
+                    $(this).text("Get your free spins");
                 }
             })
 
