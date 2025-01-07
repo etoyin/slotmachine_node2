@@ -113,6 +113,8 @@ async function checkStatus() {
     case "succeeded":
       // showMessage("Payment succeeded!");
       let user_id = localStorage.getItem('user_id');
+      console.log(user_id);
+      
       await fetch("/register_transaction", {
         method: "post",
         headers: {
