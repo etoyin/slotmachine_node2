@@ -8,9 +8,16 @@ exports.home = (req, res) => {
 
     res.render('index.ejs', {
         title: 'Slotgame | Game Page',
-        // message: message,
-        // data: ''
     });
+};
+
+exports.mobile = (req, res) => {
+
+  console.log("Hello");
+  
+  res.render('index_mobile.ejs', {
+      title: 'Slotgame | Game Page',
+  });
 };
 
 exports.getOneUser = async (req, res) => {

@@ -13,6 +13,7 @@ const { getPaymentParam, paymentIntent, completion, paymentPage } = require('../
 const { createTransactions } = require('../controllers/transactionsController');
 
 router.get('/home', checkToken, userController.home);
+router.get('/mobile', userController.mobile);
 router.get('/users', userController.getAllUsers);
 router.post('/spin_count', checkToken, createSpins);
 router.get('/get_spins', checkToken, getAllSpins);

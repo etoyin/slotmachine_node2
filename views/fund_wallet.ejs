@@ -45,33 +45,36 @@
     
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="/js/barba-fade.js"></script>
+    <!-- <script src="/js/barba-fade.js"></script> -->
 </head>
 
-<body data-barba="container" data-barba-namespace="fund_page" class="bg-[url('/png/Background_1.png')] bg-cover h-screen bg-no-repeat">
+<body data-barba="wrapper" class="">
     <!-- remove or comment unused configs before publish -->
-    <main class="absolute left-0 top-0 w-full flex flex-col items-center justify-center ">
-        <div class="p-2 w-full sm:w-3/4 lg:w-1/2 text-center mt-20">
-            
-            <div class="bg-[url('/png/gui/MessagePanel.png')] bg-contain bg-center bg-no-repeat h-80 text-white my-5 p-5 flex items-center justify-center w-full sm:w-7/12 mx-auto">
-                <!-- <img src="/png/gui/MessagePanel.png" alt=""> -->
-                 <div class="">
-                    <a href="/home">
-                        <p class="underline text-yellow-400 font-semibold">Go Back</p>
-                    </a>
-                    <p class="p-2 px-4">
-                        Your wallet balance is:
-                    </p>
-                    <h3 class="font-bold text-xl" id="balance">0</h3>
-                    <div class="mt-3 text-black">
-                        <a href="/credit_card">
-                            <div class="bg-[#fbe80a] w-40 p-2 rounded-lg mx-auto">Buy More</div>
-                        </a>
-                    </div>
-                 </div>
+    <div data-barba="container" class="bg-[url('/png/Background_1.png')] bg-cover h-screen bg-no-repeat">
+        <main class="absolute top-0 left-0 flex flex-col items-center justify-center w-full ">
+            <div class="w-full p-2 mt-20 text-center sm:w-3/4 lg:w-1/2">
+                
+                <div class="bg-[url('/png/gui/MessagePanel.png')] bg-contain bg-center bg-no-repeat h-80 text-white my-5 p-5 flex items-center justify-center w-full sm:w-7/12 mx-auto">
+                    <!-- <img src="/png/gui/MessagePanel.png" alt=""> -->
+                     <div class="">
+                        <!-- <a id="back" href="/home"> -->
+                            <p id="back" class="font-semibold text-yellow-400 underline cursor-pointer">Go Back</p>
+                        <!-- </a> -->
+                        <p class="p-2 px-4">
+                            Your wallet balance is:
+                        </p>
+                        <h3 class="text-xl font-bold" id="balance">0</h3>
+                        <div class="mt-3 text-black">
+                            <a href="/credit_card">
+                                <div class="bg-[#fbe80a] w-40 p-2 rounded-lg mx-auto">Buy More</div>
+                            </a>
+                        </div>
+                     </div>
+                </div>
             </div>
-        </div>
-    </main>
+        </main>
+    </div>
+    <script src="/bundle.js" defer></script>
     <script>
         const validateEmail = (email) => {
             return String(email)
@@ -81,6 +84,7 @@
             );
         };
         $(document).ready(function(){
+            $("#back").attr("href", "jjjp");
 
             
 

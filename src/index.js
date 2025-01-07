@@ -44,47 +44,71 @@ document.addEventListener('DOMContentLoaded', function () {
     // console.log("klkl");
     const submit = document.getElementById('submit');
     //check to see if this element exist
-        submit.addEventListener('click', async function(event) {
-            event.preventDefault();
-            this.text = "Loading...";
-            const email = document.getElementById("email").value;
-            if(validateEmail(email)){
-                try {
-                    const response = await fetch('/register', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            email
-                        }),
-                    }).then(res => res.json());
-                    console.log(response);
-                    if(response.success){
-                        localStorage.setItem('user_id', JSON.stringify(response.results.insertId));
-                        // window.location.replace("/home");
+    submit?.addEventListener('click', async function(event) {
+        event.preventDefault();
+        this.text = "Loading...";
+        const email = document.getElementById("email").value;
+        if(validateEmail(email)){
+            try {
+                const response = await fetch('/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email
+                    }),
+                }).then(res => res.json());
+                console.log(response);
+                if(response.success){
+                    localStorage.setItem('user_id', JSON.stringify(response.results.insertId));
+                    // window.location.replace("/home");
+                    if(window.innerWidth > 600){
+                        console.log("Window Width:",window.innerWidth);
                         barba.go('/home');
                     }
                     else{
-                        //window.location.replace("/");
-                        console.error("Regsitration failed!")
-                        this.text = "Get free spins";
+                        barba.go('/mobile');
                     }
-                    this.text = "Get free spins";
-                    console.log(response);
-                    // $(this).text("Get your free spins");
-
-                    
-                } catch (error){
-                    console.error("Network Error:", error);
+                }
+                else{
+                    //window.location.replace("/");
+                    console.error("Regsitration failed!")
                     this.text = "Get free spins";
                 }
+                this.text = "Get free spins";
+                console.log(response);
+                // $(this).text("Get your free spins");
+
+                
+            } catch (error){
+                console.error("Network Error:", error);
+                this.text = "Get free spins";
             }
-            else{
-                alert("Invalid email address!")
-            }
-            
-        });
+        }
+        else{
+            alert("Invalid email address!")
+        }
+        
+    });
+
+
+    console.log("klklklk");
+    
+    let back = document.getElementById("back");
+    back?.addEventListener("click", async function() {
+        console.log("Window Width:",window.innerWidth);
+        if(window.innerWidth > 600){
+            barba.go('/home');
+        }
+        else{
+            barba.go('/mobile');
+        }
+    });
+
+    // var a = document.getElementById('yourlinkId'); //or grab it by tagname etc
+    // a.href = "somelink url"
+
     /*$("#submit").click(function(){
         let email = $("#email").val();
         $(this).text("Loading...")
