@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const done = this.async()
                 await gsap.to(data.current.container, {
                 opacity: 0,
-                duration: 1,
+                duration: 0.5,
                 onComplete: done
             })
 
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const done = this.async()
                 await gsap.from(data.next.container, {
                 opacity: 0,
-                duration: 1,
+                duration: 0.5,
                 onComplete: done
             })
             },
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
     //check to see if this element exist
     submit?.addEventListener('click', async function(event) {
         event.preventDefault();
-        this.text = "Loading...";
+        submit.text = "Loading...";
         const email = document.getElementById("email").value;
         if(validateEmail(email)){
             try {
@@ -74,9 +74,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 else{
                     //window.location.replace("/");
                     console.error("Regsitration failed!")
-                    this.text = "Get free spins";
+                    submit.text = "Get free spins";
                 }
-                this.text = "Get free spins";
+                submit.text = "Get free spins";
                 console.log(response);
                 // $(this).text("Get your free spins");
 
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 
-    console.log("klklklk");
+    // console.log("klklklk");
     
     let back = document.getElementById("back");
     back?.addEventListener("click", async function() {
