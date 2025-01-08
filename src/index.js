@@ -35,40 +35,40 @@ document.addEventListener('DOMContentLoaded', function () {
 
     barba.init({
         transitions: [{
-            // name: 'default-transition',
-            async once({next}){
-                animationEnter(next.container)
-            },
+            name: 'default-transition',
+            // async once({next}){
+            //     animationEnter(next.container)
+            // },
 
-            async leave({current}){
-                console.log('Leaving...');
-                const done = this.async();
+            // async leave({current}){
+            //     console.log('Leaving...');
+            //     const done = this.async();
                 
-                animationLeave(current.container, done);
+            //     animationLeave(current.container, done);
+            // },
+
+            // async enter({next}){
+            //     console.log('Entering...');
+            //     // const done = this.async();
+            //     animationEnter(next.container);
+            // }
+            async leave(data){
+                const done = this.async()
+                await gsap.to(data.current.container, {
+                    opacity: 0,
+                    duration: 0.5,
+                    onComplete: done
+                })
+
             },
-
-            async enter({next}){
-                console.log('Entering...');
-                // const done = this.async();
-                animationEnter(next.container);
-            }
-            // async leave(data){
-            //     const done = this.async()
-            //     await gsap.to(data.current.container, {
-            //         opacity: 0,
-            //         duration: 0.5,
-            //         onComplete: done
-            //     })
-
-            // },
-            // async enter(data){
-            //     const done = this.async()
-            //     await gsap.from(data.next.container, {
-            //         opacity: 0,
-            //         duration: 0.5,
-            //         onComplete: done
-            //     })
-            // },
+            async enter(data){
+                const done = this.async()
+                await gsap.from(data.next.container, {
+                    opacity: 0,
+                    duration: 0.5,
+                    onComplete: done
+                })
+            },
         }]
     });
 
