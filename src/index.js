@@ -4,6 +4,7 @@ import gsap from 'gsap';
 
 // barba.use(barbaCss);
 
+// document.getElementById('submit').value = "Loading...";
 
 const validateEmail = (email) => {
     return String(email)
@@ -73,10 +74,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // console.log("klkl");
     const submit = document.getElementById('submit');
+    // document.getElementById('submit').textContent = "Loading...";
     //check to see if this element exist
     submit?.addEventListener('click', async function(event) {
         event.preventDefault();
-        submit.text = "Loading...";
+        submit.value = "Loading...";
         const email = document.getElementById("email").value;
         if(validateEmail(email)){
             try {
@@ -104,20 +106,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 else{
                     //window.location.replace("/");
                     console.error("Regsitration failed!")
-                    submit.text = "Get free spins";
+                    submit.value = "Get free spins";
                 }
-                submit.text = "Get free spins";
+                submit.value = "Get free spins";
                 console.log(response);
                 // $(this).text("Get your free spins");
 
                 
             } catch (error){
                 console.error("Network Error:", error);
-                this.text = "Get free spins";
+                this.textContent = "Get free spins";
             }
         }
         else{
-            alert("Invalid email address!")
+            alert("Invalid email address!");
         }
         
     });

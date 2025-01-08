@@ -23,6 +23,7 @@ const User_profile = sequelize.define('gamer_profile', {
   },
   balance: {
     type: Sequelize.DataTypes.STRING,
+    default: "100",
   },
 }, {
     tableName: 'gamer_profile', // Specify the table name if it differs from the model's name
