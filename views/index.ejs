@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html data-barba="wrapper">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><%= title %></title>
@@ -42,7 +42,7 @@
     </script>
 </head>
 
-<body data-barba="wrapper" data-barba-namespace="game_page">
+<body data-barba="container" data-barba-namespace="game_page">
     <!-- remove or comment unused configs before publish -->
     <script>
         var getUrlParameter = function getUrlParameter(sParam) {
@@ -65,7 +65,6 @@
             if(id){
                 localStorage.setItem('user_id', JSON.stringify(Number(id)));
                 console.log("YYYYYYYYYYYYYYYYYYYYYYYYYYYyy");
-                
             }
         })
     </script>

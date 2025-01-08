@@ -20,7 +20,7 @@ router.get('/get_spins', checkToken, getAllSpins);
 router.post('/game_page_count', checkToken, createVisits);
 router.get('/all_game_page_count', checkToken, getAllVisits);
 
-router.get('/fund_wallet', checkToken, viewPage);
+router.get('/fund_wallet', viewPage);
 router.post('/track_fund_page', checkToken, createFundVisits);
 router.post('/get_wallet_balance', checkToken, getWalletBalance);
 

@@ -1,5 +1,8 @@
 import barba from '@barba/core';
 import gsap from 'gsap';
+// import barbaCss from '@barba/css';
+
+// barba.use(barbaCss);
 
 
 const validateEmail = (email) => {
@@ -15,29 +18,56 @@ document.addEventListener('DOMContentLoaded', function () {
     const container = document.querySelector('.barba-container');
     if(container){
         console.log("container element is:", container);
-     } else{
-       console.log("barba container element not found")
-     }
+    } else{
+        console.log("barba container element not found")
+    }
+
+    const animationEnter = (container) => {
+        return gsap.from(container, { autoAlpha: 0, duration: 2, clearProps: 'all', ease: 'none'})
+    };
+
+    const animationLeave = (container, done) => {
+        return gsap.to(container, { autoAlpha: 0, duration: 4, clearProps: 'all', ease: 'none', onComplete: () => done()})
+    }
+
+
+
     barba.init({
         transitions: [{
-            name: 'default-transition',
-            async leave(data){
-                const done = this.async()
-                await gsap.to(data.current.container, {
-                opacity: 0,
-                duration: 0.5,
-                onComplete: done
-            })
+            // name: 'default-transition',
+            async once({next}){
+                animationEnter(next.container)
+            },
 
+            async leave({current}){
+                console.log('Leaving...');
+                const done = this.async();
+                
+                animationLeave(current.container, done);
             },
-            async enter(data){
-                const done = this.async()
-                await gsap.from(data.next.container, {
-                opacity: 0,
-                duration: 0.5,
-                onComplete: done
-            })
-            },
+
+            async enter({next}){
+                console.log('Entering...');
+                // const done = this.async();
+                animationEnter(next.container);
+            }
+            // async leave(data){
+            //     const done = this.async()
+            //     await gsap.to(data.current.container, {
+            //         opacity: 0,
+            //         duration: 0.5,
+            //         onComplete: done
+            //     })
+
+            // },
+            // async enter(data){
+            //     const done = this.async()
+            //     await gsap.from(data.next.container, {
+            //         opacity: 0,
+            //         duration: 0.5,
+            //         onComplete: done
+            //     })
+            // },
         }]
     });
 
