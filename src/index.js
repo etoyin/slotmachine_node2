@@ -65,21 +65,21 @@ document.addEventListener('DOMContentLoaded', function () {
     //     }]
     // });
 
-    swup.hooks.on('content:replace', async (event) => {
-        // Get the new document
-        // console.log("content replaced:", event.to.html);
-        const newDoc = new DOMParser().parseFromString(event.to.html, 'text/html');
-        const scripts = newDoc.querySelectorAll('script[type="text/javascript"]');
-        for(const script of scripts) {
-            console.log(script);
+    // swup.hooks.on('content:replace', async (event) => {
+    //     // Get the new document
+    //     // console.log("content replaced:", event.to.html);
+    //     const newDoc = new DOMParser().parseFromString(event.to.html, 'text/html');
+    //     const scripts = newDoc.querySelectorAll('script[type="text/javascript"]');
+    //     for(const script of scripts) {
+    //         console.log(script);
             
-            if (script.src) {
-                await loadScript(script.src);
-            }
-        };
-        console.log(document.body);
+    //         if (script.src) {
+    //             await loadScript(script.src);
+    //         }
+    //     };
+    //     console.log(document.body);
 
-    });
+    // });
     // console.log("klkl");
     const submit = document.getElementById('submit');
     // document.getElementById('submit').textContent = "Loading...";
@@ -105,10 +105,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     // window.location.replace("/home");
                     if(window.innerWidth > 600){
                         console.log("Window Width:",window.innerWidth);
-                        swup.navigate('/home');
+                        await swup.navigate('/home');
                     }
                     else{
-                        swup.navigate('/mobile');
+                        await swup.navigate('/mobile');
                     }
                 }
                 else{
@@ -116,7 +116,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     console.error("Regsitration failed!")
                     submit.value = "Get free spins";
                 }
-                submit.value = "Get free spins";
                 console.log(response);
                 // $(this).text("Get your free spins");
 
