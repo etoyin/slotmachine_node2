@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html data-barba="wrapper">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><%= title %></title>
-<!-- <title></title> -->
+<html >
+
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %>kkkkk</title>
+    <!-- <title></title> -->
     <style type="text/css">
-        body {
+        body.canvas {
             background-image: url("new/backloads.png");
             /* The image used */
             background-color: #cccccc;
@@ -34,7 +35,16 @@
     <script src="/js/phaser.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <script type="text/javascript" src="/js/Http.js"></script>
+    <script type="text/javascript" src="/js/slotConfig_3x5.js"></script>
+    <script type="text/javascript" src="/js/mkutils.js"></script>
+    <script type="text/javascript" src="/js/popups.js"></script>
+    <script type="text/javascript" src="/js/state_machine.js"></script>
+    <script type="text/javascript" src="/js/slot_classes.js"></script>
+    <script type="text/javascript" src="/js/slotGame.js"></script>
     <script>
+        console.log("Loadededdedededee.............")
         if(window.innerWidth <= 600){
             console.log("Window Width:",window.innerWidth);
             window.location.replace('/mobile');
@@ -42,7 +52,7 @@
     </script>
 </head>
 
-<body data-barba="container" data-barba-namespace="game_page">
+<body class="transition-main canvas" >
     <!-- remove or comment unused configs before publish -->
     <script>
         var getUrlParameter = function getUrlParameter(sParam) {
@@ -68,13 +78,6 @@
             }
         })
     </script>
-    <script src="/js/Http.js"></script>
-    <script src="/js/slotConfig_3x5.js"></script>
-    <script src="/js/mkutils.js"></script>
-    <script src="/js/popups.js"></script>
-    <script src="/js/state_machine.js"></script>
-    <script src="/js/slot_classes.js"></script>
-    <script src="/js/slotGame.js"></script>
 </body>
 
 </html>
