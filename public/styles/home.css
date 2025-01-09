@@ -1,0 +1,7 @@
+html.is-animating #swup {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+html.is-animating #swup.is-leaving {
+  opacity: 1;
+}
