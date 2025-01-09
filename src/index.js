@@ -1,5 +1,5 @@
 import Swup from 'swup';
-
+import $ from 'jquery'
 // import barba from '@barba/core';
 // import gsap from 'gsap';
 // import barbaCss from '@barba/css';
@@ -65,21 +65,148 @@ document.addEventListener('DOMContentLoaded', function () {
     //     }]
     // });
 
-    // swup.hooks.on('content:replace', async (event) => {
-    //     // Get the new document
-    //     // console.log("content replaced:", event.to.html);
-    //     const newDoc = new DOMParser().parseFromString(event.to.html, 'text/html');
-    //     const scripts = newDoc.querySelectorAll('script[type="text/javascript"]');
-    //     for(const script of scripts) {
-    //         console.log(script);
-            
-    //         if (script.src) {
-    //             await loadScript(script.src);
-    //         }
-    //     };
-    //     console.log(document.body);
+    swup.hooks.on('content:replace', async (event) => {
+        // Get the new document
+        console.log("content replaced:", event);
+        console.log("contentReplaced event fired, url is:", window.location.pathname);
+        if(window.location.pathname == "/fund_wallet"){
+            let user_id = localStorage.getItem('user_id');
+            fetch('/track_fund_page', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    user_id
+                })
+            })
+            .then(response => {
+                // Handle the response, if necessary
+                return response.json();
+            })
+            .then(res => {
+                console.log(res);
+            })
+            .catch(error => {
+                console.error('Error tracking visit:', error);
+            });
 
-    // });
+
+
+
+            fetch('/get_wallet_balance', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    user_id
+                })
+            })
+            .then(response => {
+                // Handle the response, if necessary
+                return response.json();
+            })
+            .then(res => {
+                console.log(res);
+                $("#balance").text(
+                    res.data[0].balance ? res.data[0].balance : 0
+                )
+            })
+            .catch(error => {
+                console.error('Error tracking visit:', error);
+            });
+        }
+        if(window.location.pathname == "/credit_card"){
+            $(document).ready(function(){
+            
+                $("#submit_payment").click(function(){
+                    let first_name = $("#first_name").val();
+                    let last_name = $("#last_name").val();
+                    let currency = $("#currency").val();
+                    let amount = $("#amount").val();
+                    let email = $("#email").val();
+    
+    
+                    console.log(amount, currency);
+                    if(currency.length < 1){
+                        alert("Select a currency!")
+                    }
+                    if(!validateEmail(email)){
+                        alert("Enter valid email!")
+                    }
+                    if(amount < 1){
+                        alert("Add an amount greater $0.99!")
+                    }
+    
+                    if(currency.length >1 && amount >= 1 && validateEmail(email)){
+                        //alert("jkj!");
+                        $("form").submit();
+                    }
+    
+                })
+    
+                let user_id = localStorage.getItem('user_id');
+                
+                fetch('/track_credit_card_page', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id
+                    })
+                })
+                .then(response => {
+                    // Handle the response, if necessary
+                    return response.json();
+                })
+                .then(res => {
+                    console.log(res);
+                })
+                .catch(error => {
+                    console.error('Error tracking visit:', error);
+                });
+    
+    
+    
+    
+                fetch('/get_wallet_balance', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id
+                    })
+                })
+                .then(response => {
+                    // Handle the response, if necessary
+                    return response.json();
+                })
+                .then(res => {
+                    console.log(res);
+                    $("#balance").text(
+                        res.data[0].balance ? res.data[0].balance : 0
+                    )
+                })
+                .catch(error => {
+                    console.error('Error tracking visit:', error);
+                });
+            })
+        }
+        const newDoc = new DOMParser().parseFromString(event.to.html, 'text/html');
+        const scripts = newDoc.querySelectorAll('script[type="text/javascript"]');
+        for(const script of scripts) {
+            console.log(script);
+            
+            if (script.src) {
+                await loadScript(script.src);
+            }
+        };
+        console.log(document.body);
+
+    });
     // console.log("klkl");
     const submit = document.getElementById('submit');
     // document.getElementById('submit').textContent = "Loading...";
@@ -145,53 +272,4 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // var a = document.getElementById('yourlinkId'); //or grab it by tagname etc
-    // a.href = "somelink url"
-
-    /*$("#submit").click(function(){
-        let email = $("#email").val();
-        $(this).text("Loading...")
-
-        if(validateEmail(email)){
-
-            fetch('/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    email
-                })
-                })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                if(data.success){
-                    localStorage.setItem('user_id', JSON.stringify(data.results.insertId));
-                    //window.location.replace("/home");
-                    barba.go('/home'); 
-                }
-                else{
-                    //window.location.replace("/");
-                }
-                console.log(data);
-                //  $(this).text("Get your free spins");
-                
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                $(this).text("Get your free spins");
-            });
-            
-            // $.post("/register", {
-            //     body: JSON.stringify(email)
-            // }, function(result){
-            //     console.log(result);
-            // });
-        }
-        else{
-            alert("Incorrect email!");
-            $(this).text("Get your free spins");
-        }
-    })*/
 });

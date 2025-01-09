@@ -11,44 +11,16 @@
     <!-- <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/forms@0.5.7/src/index.min.js"></script> -->
     <link rel="stylesheet" href="/styles/output.css">
+    <link rel="stylesheet" href="/styles/home.css">
+
     <!-- <script src="/js/phaser.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
-    <script>
 
-        tailwind.config = {
-          content: ["*.{html,js,ejs}"],
-          theme: {
-            extend: {
-              fontFamily: {
-                'montserrat': ['Montserrat'],
-                'lato': ['Lato'],
-                'garamond': ['Garamond']
-                },
-                // keyframes: {
-                //     pulse: {
-                //     '0%': { boxShadow: '0 0 0 0 rgba(250,204,21, 1)' },
-                //     '70%': { boxShadow: '0 0 0 10px rgba(250,204,21, 1)' },
-                //     '100%': { boxShadow: '0 0 0 0 rgba(250,204,21, 1)' }
-                //     }
-                // },
-                // animation: {
-                //     pulse: 'pulse 2s cubic-bezier(0.4, 0.0, 0.6, 1) infinite'
-                // }
-            },
-          },
-          plugins: [
-            require('@tailwindcss/forms'),
-            require('tailwindcss-animate'),
-            require('@tailwindcss/ui'),
-          ]
-        }
-    
-    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- <script src="/js/barba-fade.js"></script> -->
 </head>
 
-<body id="swup" data-barba="wrapper" id="swup" class="">
+<body id="swup" data-barba="wrapper" class="">
     <!-- remove or comment unused configs before publish -->
     <div data-barba="container" class="bg-[url('/png/Background_1.png')] bg-cover h-screen bg-no-repeat">
         <main class="absolute top-0 left-0 flex flex-col items-center justify-center w-full ">
@@ -75,7 +47,7 @@
         </main>
     </div>
     <script src="/bundle.js" defer></script>
-    <script>
+    <script >
         const validateEmail = (email) => {
             return String(email)
             .toLowerCase()
