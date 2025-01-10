@@ -70,52 +70,64 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log("content replaced:", event);
         console.log("contentReplaced event fired, url is:", window.location.pathname);
         if(window.location.pathname == "/fund_wallet"){
-            let user_id = localStorage.getItem('user_id');
-            fetch('/track_fund_page', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    user_id
+            $(document).ready(function(){
+                let back = document.getElementById("back");
+                back?.addEventListener("click", async function() {
+                    console.log("Window Width:",window.innerWidth);
+                    if(window.innerWidth > 600){
+                        swup.navigate('/home');
+                    }
+                    else{
+                        swup.navigate('/mobile');
+                    }
+                });
+                let user_id = localStorage.getItem('user_id');
+                fetch('/track_fund_page', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id
+                    })
                 })
-            })
-            .then(response => {
-                // Handle the response, if necessary
-                return response.json();
-            })
-            .then(res => {
-                console.log(res);
-            })
-            .catch(error => {
-                console.error('Error tracking visit:', error);
-            });
-
-
-
-
-            fetch('/get_wallet_balance', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    user_id
+                .then(response => {
+                    // Handle the response, if necessary
+                    return response.json();
                 })
+                .then(res => {
+                    console.log(res);
+                })
+                .catch(error => {
+                    console.error('Error tracking visit:', error);
+                });
+
+
+
+
+                fetch('/get_wallet_balance', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id
+                    })
+                })
+                .then(response => {
+                    // Handle the response, if necessary
+                    return response.json();
+                })
+                .then(res => {
+                    console.log(res);
+                    $("#balance").text(
+                        res.data[0].balance ? res.data[0].balance : 0
+                    )
+                })
+                .catch(error => {
+                    console.error('Error tracking visit:', error);
+                });
             })
-            .then(response => {
-                // Handle the response, if necessary
-                return response.json();
-            })
-            .then(res => {
-                console.log(res);
-                $("#balance").text(
-                    res.data[0].balance ? res.data[0].balance : 0
-                )
-            })
-            .catch(error => {
-                console.error('Error tracking visit:', error);
-            });
         }
         if(window.location.pathname == "/credit_card"){
             $(document).ready(function(){
@@ -261,15 +273,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // console.log("klklklk");
     
-    let back = document.getElementById("back");
-    back?.addEventListener("click", async function() {
-        console.log("Window Width:",window.innerWidth);
-        if(window.innerWidth > 600){
-            swup.navigate('/home');
-        }
-        else{
-            swup.navigate('/mobile');
-        }
-    });
+    
 
 });

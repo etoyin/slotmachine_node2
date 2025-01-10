@@ -46,7 +46,7 @@ async function sendVerificationEmail(email, id) {
 
 
 
-  ejs.renderFile("./views/demo.ejs", {url}, async function(error, data){
+  ejs.renderFile("./views/daily_mail_cron.ejs", {url}, async function(error, data){
     if(error){
       console.log(error);
     }

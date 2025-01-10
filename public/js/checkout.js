@@ -1,96 +1,215 @@
-// replace the test publishable key with your hyperswitch publishable key
-const hyper = Hyper("pk_snd_c8f1b80338f74dfa99a8c5367694fd2c");//"pk_snd_c8f1b80338f74dfa99a8c5367694fd2c";
-
-const items = [{ product_id: "A113" }];
-
-// background color to match sdk theme
-const backgroundColor = (theme) => {
-  if (theme === "brutal") return "#ff00c533";
-  else if (theme === "midnight") return "#1A1F36";
-  else if (theme === "soft") return "#3E3E3E";
-  else return "#ddd8d812";
-};
-
 let elements;
+let emailAddress;
+let paymentElement;
+let form;
+let processingTimeout;
 
-initialize();
-checkStatus();
+// Initialize payment form when DOM is ready
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        console.log('DOM ready, checking Hyper...');
+        
+        // Check if Hyper is available
+        if (!window.Hyper) {
+            throw new Error('Hyper not found. Please refresh the page.');
+        }
 
-document
-  .querySelector("#payment-form")
-  .addEventListener("submit", handleSubmit);
+        console.log('Hyper found:', {
+            version: window.Hyper.version,
+            hasElements: !!window.Hyper.elements
+        });
+        
+        // Get DOM elements
+        form = document.querySelector("#payment-form");
+        emailAddress = document.getElementById("email");
+        
+        if (!form || !emailAddress) {
+            throw new Error('Required elements not found');
+        }
 
-var emailAddress = document.getElementById("email");
+        // Add form submit handler
+        form.addEventListener("submit", handleSubmit);
+
+        // Initialize payment
+        await initialize();
+        await checkStatus();
+
+    } catch (error) {
+        console.error('Initialization error:', error);
+        showMessage(error.message || 'Failed to initialize payment system', false);
+    }
+});
 
 async function initialize() {
-  setLoading(true);
-  const response = await fetch("/call_payment_intent", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      amount: document.getElementById("amount").value,
-      currency: document.getElementById("currency").value,
-    }),
-  });
-  const { clientSecret } = await response.json();
-
-  console.log(clientSecret);
+  console.log('Starting payment initialization...');
   
+  if (!window.Hyper || !window.Hyper.elements) {
+    console.error('Hyper not properly initialized');
+    showMessage("Payment system not ready. Please refresh the page.", false);
+    return;
+  }
 
-  const appearance = {
-    theme: "midnight", // Theme - default, soft, brutal, midnight, none, charcoal
-  };
+  try {
+    setLoading(true);
+    const token = getCookie('auth');
+    if (!token) {
+        throw new Error('Authentication token not found');
+    }
 
-  document.body.style.background = backgroundColor(appearance.theme);
-  elements = hyper.elements({ appearance, clientSecret });
-
-  
-  const paymentElementOptions = {
-    layout: "tabs",
-    // paymentMethodOrder: ["card", "ideal", "sepaDebit", "sofort"],
-    wallets: {
-      walletReturnUrl: `${window.location.origin}`,
-      applePay: "auto",
-      googlePay: "auto",
-      payPal: "auto",
-      klarna: "never",
-      style: {
-        theme: "dark",
-        type: "default",
-        height: 55,
-        buttonRadius: 4,
+    console.log('Creating payment intent...');
+    const response = await fetch("/call_payment_intent", {
+      method: "POST",
+      headers: { 
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
       },
-    },
-  };
-  
+      body: JSON.stringify({
+        amount: document.getElementById("amount").value,
+        currency: document.getElementById("currency").value,
+        user_id: localStorage.getItem('user_id')
+      }),
+    });
 
-  const paymentElement = elements.create("payment", paymentElementOptions);
-  paymentElement.mount("#payment-element");
-  setLoading(false);
+    if (response.status === 401) {
+      throw new Error('Authentication failed. Please login again.');
+    }
+    
+    const responseData = await response.json();
+    console.log("Payment Intent Response:", responseData);
+    
+    if (!response.ok) {
+      throw new Error(responseData.message || responseData.error || 'Failed to create payment intent');
+    }
+    
+    const { clientSecret } = responseData;
+    if (!clientSecret) {
+      throw new Error('No client secret returned from server');
+    }
+
+    const appearance = {
+      theme: "midnight",
+      variables: {
+        colorPrimary: '#0570de',
+        colorBackground: '#1A1F36',
+        colorText: '#ffffff',
+        colorDanger: '#ff0000',
+        fontFamily: 'system-ui, sans-serif',
+        borderRadius: '4px'
+      }
+    };
+
+    document.body.style.background = "#1A1F36";
+    console.log('Creating elements with appearance:', appearance);
+    
+    elements = window.Hyper.elements({ 
+        appearance, 
+        clientSecret,
+        mode: 'test'
+    });
+
+    const paymentElementOptions = {
+      layout: "tabs",
+      paymentMethodOrder: ["card"],
+      defaultValues: {
+        billingDetails: {
+          email: document.getElementById("email").value
+        }
+      }
+    };
+
+    try {
+      console.log('Creating payment element...');
+      paymentElement = elements.create("payment", paymentElementOptions);
+      
+      // Mount payment element and wait for it to be ready
+      const mountPromise = new Promise((resolve, reject) => {
+          let mounted = false;
+          
+          paymentElement.on('ready', () => {
+              console.log('Payment Element Ready');
+              mounted = true;
+              resolve();
+          });
+          
+          paymentElement.on('change', (event) => {
+              console.log('Payment Element Change:', event);
+              if (event.error) {
+                  showMessage(event.error.message, false);
+              }
+          });
+
+          paymentElement.on('loaderror', (error) => {
+              console.error('Payment Element Load Error:', error);
+              reject(new Error('Failed to load payment element: ' + error.message));
+          });
+
+          setTimeout(() => {
+              if (!mounted) {
+                  reject(new Error('Payment element mount timeout'));
+              }
+          }, 10000);
+      }).catch(error => {
+          console.error('Mount promise error:', error);
+          showMessage('Failed to mount payment element', false);
+      });
+
+      console.log('Mounting payment element...');
+      await paymentElement.mount("#payment-element");
+      await mountPromise;
+      console.log('Payment element initialization complete');
+    } catch (error) {
+      console.error('Payment Element Error:', error);
+      throw new Error('Failed to initialize payment form: ' + error.message);
+    }
+  } catch (error) {
+    console.error("Initialization error:", error);
+    showMessage("Failed to initialize payment form", false);
+  } finally {
+    setLoading(false);
+  }
 }
 
 async function handleSubmit(e) {
   e.preventDefault();
   setLoading(true);
   
-  const { error, status } = await hyper.confirmPayment({
-    elements,
-    confirmParams: {
-      return_url: `${window.location.origin}/completion`,
-      receipt_email: emailAddress,
-    },
-    redirect: "always",
-  });
-
-  if (error && (error.type === "card_error" || error.type === "validation_error")) {
-    showMessage(error.message);
-  } else {
-    showMessage("An unexpected error occurred.");
+  if (!window.Hyper) {
+    console.error('Hyper not initialized');
+    showMessage("Payment system not ready. Please refresh the page.", false);
+    return;
   }
 
-  console.log(status);
-  handlePaymentStatus(status);
-  setLoading(false);
+  try {
+    console.log('Confirming payment...');
+    const { error, status } = await window.Hyper.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: `${window.location.origin}/completion`,
+        receipt_email: emailAddress.value,
+      },
+      redirect: "always",
+    });
+
+    if (error) {
+      console.error('Payment confirmation error:', error);
+      if (error.type === "card_error" || error.type === "validation_error") {
+        showMessage(error.message, false);
+      } else {
+        showMessage("An unexpected error occurred.", false);
+      }
+      return;
+    }
+
+    console.log("Payment status:", status);
+    if (status) {
+      handlePaymentStatus(status);
+    }
+  } catch (error) {
+    console.error("Submit error:", error);
+    showMessage("Failed to process payment", false);
+  } finally {
+    setLoading(false);
+  }
 }
 
 async function checkStatus() {
@@ -98,74 +217,221 @@ async function checkStatus() {
     "payment_intent_client_secret"
   );
 
-  console.log("elements");
-
   if (!clientSecret) {
     return;
   }
 
-  const { paymentIntent } = await hyper.retrievePaymentIntent(clientSecret);
+  if (!window.Hyper) {
+    console.error('Hyper not initialized');
+    showMessage("Payment system not ready. Please refresh the page.", false);
+    return;
+  }
 
-  console.log(paymentIntent);
-  // pay_mOU1hW9OQ9BzcUCs3GUO
-  switch (paymentIntent.status) {
-    
-    case "succeeded":
-      // showMessage("Payment succeeded!");
-      let user_id = localStorage.getItem('user_id');
-      console.log(user_id);
-      
-      await fetch("/register_transaction", {
-        method: "post",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          user_id, paymentIntent
-        })
-      })
-      .then(res => res.json())
-      .then(res =>{
-        if(res.status == 200 || res.status == 400){
-          console.log(res);
-          showMessage(res.message);
+  try {
+    console.log('Retrieving payment intent...');
+    const { paymentIntent } = await window.Hyper.retrievePaymentIntent(clientSecret);
+    console.log("Payment Intent:", paymentIntent);
+
+    switch (paymentIntent.status) {
+      case "succeeded":
+        const user_id = localStorage.getItem('user_id');
+        if (!user_id) {
+          showMessage("User ID not found", false);
+          return;
         }
-      })
 
-      break;
-    case "processing":
-      showMessage("Your payment is processing.");
-      break;
-    case "requires_payment_method":
-      showMessage("Your payment was not successful, please try again.");
-      break;
-    default:
-      showMessage("Something went wrong.");
-      break;
+        try {
+          const token = getCookie('auth');
+          if (!token) {
+            throw new Error('Authentication required');
+          }
+
+          const response = await fetch("/register_transaction", {
+            method: "post",
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+              user_id,
+              paymentIntent
+            })
+          });
+
+          if (response.status === 401) {
+            throw new Error('Authentication failed. Please login again.');
+          }
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Transaction registration failed');
+          }
+
+          const result = await response.json();
+          console.log("Transaction result:", result);
+
+          if (result.status === 200) {
+            showMessage(result.message);
+          } else if (result.status === 400) {
+            showMessage(result.message, false);
+            console.warn("Transaction warning:", result.message);
+          } else {
+            throw new Error('Unexpected response status');
+          }
+        } catch (error) {
+          console.error("Transaction error:", error);
+          showMessage("Failed to register transaction", false);
+        }
+        break;
+
+      case "processing":
+        showMessage("Your payment is processing.", false);
+        // Set up a timeout to check status again
+        if (processingTimeout) clearTimeout(processingTimeout);
+        processingTimeout = setTimeout(checkStatus, 5000);
+        break;
+
+      case "requires_payment_method":
+        showMessage("Your payment was not successful, please try again.", false);
+        break;
+
+      default:
+        console.warn("Unexpected payment status:", paymentIntent.status);
+        showMessage("Something went wrong.", false);
+        break;
+    }
+  } catch (error) {
+    console.error("Status check error:", error);
+    showMessage("Failed to check payment status", false);
   }
 }
 
-function showMessage(messageText) {
+function showMessage(messageText, redirect = true) {
   const messageContainer = document.querySelector("#payment-message");
-
+  if (!messageContainer) {
+    console.error('Message container not found');
+    return;
+  }
+  
   messageContainer.classList.remove("hidden");
   messageContainer.textContent = messageText;
 
-  setTimeout(function () {
-    messageContainer.classList.add("hidden");
-    messageText.textContent = "";
-    window.location.replace("/home")
-  }, 4000);
+  if (redirect) {
+    setTimeout(function () {
+      messageContainer.classList.add("hidden");
+      messageContainer.textContent = "";
+      window.location.replace("/home");
+    }, 8000);
+  }
 }
 
 function setLoading(isLoading) {
+  const submitButton = document.querySelector("#submit");
+  const spinner = document.querySelector("#spinner");
+  const buttonText = document.querySelector("#button-text");
+  
+  if (!submitButton || !spinner || !buttonText) {
+    console.error('Loading elements not found');
+    return;
+  }
+
   if (isLoading) {
-    document.querySelector("#submit").disabled = true;
-    document.querySelector("#spinner").classList.remove("hidden");
-    document.querySelector("#button-text").classList.add("hidden");
+    submitButton.disabled = true;
+    spinner.classList.remove("hidden");
+    buttonText.classList.add("hidden");
   } else {
-    document.querySelector("#submit").disabled = false;
-    document.querySelector("#spinner").classList.add("hidden");
-    document.querySelector("#button-text").classList.remove("hidden");
+    submitButton.disabled = false;
+    spinner.classList.add("hidden");
+    buttonText.classList.remove("hidden");
   }
 }
+
+// Cleanup on page unload
+window.addEventListener('unload', () => {
+  if (processingTimeout) {
+    clearTimeout(processingTimeout);
+  }
+});
+
+// Add debug keyboard shortcut
+document.addEventListener('keydown', function(e) {
+  if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+    const debugInfo = document.getElementById('debug-info');
+    const debugLogs = document.getElementById('debug-logs');
+    debugInfo.style.display = debugInfo.style.display === 'none' ? 'block' : 'none';
+    if (debugInfo.style.display === 'block') {
+      debugLogs.textContent = JSON.stringify(window.hyperswitchDebug.logs, null, 2);
+    }
+  }
+});
+
+// Load HyperLoader
+(function() {
+  console.log('Page loading started');
+  window.hyperswitchDebug = {
+    scriptLoadStart: Date.now(),
+    logs: []
+  };
+  window.hyperswitchDebug.logs.push('Page load started at: ' + new Date().toISOString());
+
+  // Create script element
+  const script = document.createElement('script');
+  script.src = 'https://sandbox.hyperswitch.io/v1/HyperLoader.js'; // Updated URL based on guide
+  script.async = true;
+  script.nonce = '<%= nonce %>';
+
+  script.addEventListener('load', function() {
+    window.hyperswitchDebug.logs.push('HyperLoader script loaded at: ' + new Date().toISOString());
+
+    try {
+      // Check if HyperLoader is available
+      if (typeof window.HyperLoader !== 'function') {
+        console.warn('HyperLoader is not available, attempting fallback');
+        // Attempt a fallback or alternative method if available
+        // This is a placeholder for any alternative method provided by Hyperswitch
+        throw new Error('HyperLoader is not available');
+      }
+
+      // Initialize Hyper with config
+      const hyperConfig = {
+        apiVersion: '2022-08-01',
+        mode: 'test' // Ensure test mode is set
+      };
+
+      window.Hyper = window.HyperLoader("<%= process.env.HYPER_PUBLISHABLE_KEY %>", hyperConfig);
+      window.hyperswitchDebug.logs.push('Hyper initialized at: ' + new Date().toISOString());
+
+      // Load checkout.js after successful initialization
+      if (typeof window.onHyperReady === 'function') {
+        window.onHyperReady();
+      }
+    } catch (error) {
+      console.error('Failed to initialize Hyper:', error);
+      window.hyperswitchDebug.logs.push('Hyper initialization failed at: ' + new Date().toISOString() + ' with error: ' + error.message);
+      const messageEl = document.getElementById('payment-message');
+      if (messageEl) {
+        messageEl.classList.remove('hidden');
+        messageEl.textContent = 'Failed to initialize payment system. Please refresh the page.';
+      }
+    }
+  });
+
+  script.addEventListener('error', function(error) {
+    window.hyperswitchDebug.logs.push('HyperLoader script failed to load at: ' + new Date().toISOString());
+    const messageEl = document.getElementById('payment-message');
+    if (messageEl) {
+      messageEl.classList.remove('hidden');
+      messageEl.textContent = 'Failed to load payment system. Please refresh the page.';
+    }
+  });
+
+  // Add script to document
+  window.hyperswitchDebug.logs.push('Adding HyperLoader script at: ' + new Date().toISOString());
+  document.head.appendChild(script);
+
+  // Initialize Hyper object after script is loaded
+  script.addEventListener('load', function() {
+    window.Hyper = window.Hyper || {};
+    window.hyperswitchDebug.logs.push('Hyper object initialized at: ' + new Date().toISOString());
+  });
+})();
