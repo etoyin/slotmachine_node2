@@ -9,7 +9,7 @@ const { viewPage, createFundVisits, getWalletBalance } = require('../controllers
 const { viewCreditCardPage, createCreditVisits } = require('../controllers/credit_cardController');
 const { viewEmail, verify_email, createEmailClicks } = require('../controllers/emailCountController');
 const { createDailyEmailClicks } = require('../controllers/dailyEmailCountController');
-const { getPaymentParam, paymentIntent, completion, paymentPage, webhook } = require('../controllers/managePaymentController');
+const { getPaymentParam, paymentIntent, completion, paymentPage } = require('../controllers/managePaymentController');
 const { createTransactions } = require('../controllers/transactionsController');
 
 router.get('/home', checkToken, userController.home);
@@ -41,8 +41,6 @@ router.post('/update_coins', checkToken,  updateCoin);
 router.get('/payment_page/:data', checkToken,  paymentPage);
 router.get('/get-one-user/:id', checkToken,  userController.getOneUser);
 
-// Webhook route - no auth required since it's called by Hyperswitch
-router.post('/webhook', express.raw({type: 'application/json'}), webhook);
 
 
 module.exports = router;
