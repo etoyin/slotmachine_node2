@@ -56,7 +56,7 @@ exports.createDailyEmailClicks = async (req, res) => {
 
     const token = sign({ email: email}, process.env.JWT_SECRET,{});
     res.cookie('auth',token);
-
+    // console.log(token);
 
     const link_token = req.query.token;
     

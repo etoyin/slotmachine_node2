@@ -6,12 +6,104 @@ let processingTimeout;
 
 // Initialize payment form when DOM is ready
 document.addEventListener('DOMContentLoaded', async () => {
+  // Load HyperLoader
+  (function() {
+    console.log('Page loading started: Initializing HyperLoader script');
+    window.hyperswitchDebug = {
+      scriptLoadStart: Date.now(),
+      logs: []
+    };
+    window.hyperswitchDebug.logs.push('Page load started at: ' + new Date().toISOString());
+
+    // Create script element
+    const script = document.createElement('script');
+    script.src = 'https://beta.hyperswitch.io/v1/HyperLoader.js'; // Updated URL based on guide
+    script.async = true;
+    script.nonce = '<%= nonce %>';
+
+    script.addEventListener('load', async function() {
+      window.hyperswitchDebug.logs.push('HyperLoader script successfully loaded at: ' + new Date().toISOString());
+      console.log('HyperLoader script successfully loaded');
+
+      try {
+// Check if HyperLoader is available
+if (typeof window.HyperLoader !== 'function') {
+  console.warn('HyperLoader is not available, attempting fallback. Current window object:', window);
+  // Attempt a fallback or alternative method if available
+  // This is a placeholder for any alternative method provided by Hyperswitch
+  throw new Error('HyperLoader is not available');
+} else {
+  console.log('HyperLoader is available.');
+}
+
+// Initialize Hyper with config
+const hyperConfig = {
+  apiVersion: '2022-08-01',
+  mode: 'test' // Ensure test mode is set
+};
+
+if (!process.env.HYPER_PUBLISHABLE_KEY) {
+  console.error('HYPER_PUBLISHABLE_KEY is not set. Please check your environment variables.');
+  throw new Error('HYPER_PUBLISHABLE_KEY is not set');
+}
+
+window.Hyper = window.HyperLoader("<%= process.env.HYPER_PUBLISHABLE_KEY %>", hyperConfig);
+window.hyperswitchDebug.logs.push('Hyper successfully initialized at: ' + new Date().toISOString());
+console.log('Hyper successfully initialized');
+
+        // Load checkout.js after successful initialization
+        if (typeof window.onHyperReady === 'function') {
+          window.onHyperReady();
+        }
+
+        // Initialize payment form
+        await initialize();
+        await checkStatus();
+      } catch (error) {
+        console.error('Failed to initialize Hyper. Error details:', error);
+        window.hyperswitchDebug.logs.push('Hyper initialization failed at: ' + new Date().toISOString() + ' with error: ' + error.message);
+        const messageEl = document.getElementById('payment-message');
+        if (messageEl) {
+          messageEl.classList.remove('hidden');
+          messageEl.textContent = 'Failed to initialize payment system. Please refresh the page.';
+        }
+      }
+    });
+
+    script.addEventListener('error', function(error) {
+      window.hyperswitchDebug.logs.push('HyperLoader script failed to load at: ' + new Date().toISOString());
+      console.error('HyperLoader script failed to load. Retrying...');
+      console.error('Network error details:', error);
+      console.error('Please check the script URL and ensure there are no network restrictions or CORS issues.');
+      setTimeout(() => {
+        document.head.appendChild(script.cloneNode(true)); // Retry loading the script
+      }, 3000); // Retry after 3 seconds
+      const messageEl = document.getElementById('payment-message');
+      if (messageEl) {
+        messageEl.classList.remove('hidden');
+        messageEl.textContent = 'Failed to load payment system. Retrying...';
+      }
+    });
+
+    // Add script to document
+    window.hyperswitchDebug.logs.push('Adding HyperLoader script at: ' + new Date().toISOString());
+    document.head.appendChild(script);
+
+    // Initialize Hyper object after script is loaded
+    script.addEventListener('load', function() {
+      window.Hyper = window.Hyper || {};
+      window.hyperswitchDebug.logs.push('Hyper object initialized at: ' + new Date().toISOString());
+    });
+  })();
     try {
         console.log('DOM ready, checking Hyper...');
         
         // Check if Hyper is available
         if (!window.Hyper) {
+            console.error('Hyper not found after script load. Debugging information:', window.hyperswitchDebug.logs);
             throw new Error('Hyper not found. Please refresh the page.');
+        } else {
+            console.log('Hyper successfully found and initialized.');
         }
 
         console.log('Hyper found:', {
@@ -35,7 +127,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         await checkStatus();
 
     } catch (error) {
-        console.error('Initialization error:', error);
+        console.error('Initialization error occurred. Error details:', error);
         showMessage(error.message || 'Failed to initialize payment system', false);
     }
 });
@@ -162,7 +254,7 @@ async function initialize() {
       throw new Error('Failed to initialize payment form: ' + error.message);
     }
   } catch (error) {
-    console.error("Initialization error:", error);
+    console.error("Initialization error occurred during payment initialization. Error details:", error);
     showMessage("Failed to initialize payment form", false);
   } finally {
     setLoading(false);
@@ -205,7 +297,7 @@ async function handleSubmit(e) {
       handlePaymentStatus(status);
     }
   } catch (error) {
-    console.error("Submit error:", error);
+    console.error("Submit error occurred during payment submission. Error details:", error);
     showMessage("Failed to process payment", false);
   } finally {
     setLoading(false);
@@ -301,7 +393,7 @@ async function checkStatus() {
         break;
     }
   } catch (error) {
-    console.error("Status check error:", error);
+    console.error("Status check error occurred during payment status check. Error details:", error);
     showMessage("Failed to check payment status", false);
   }
 }

@@ -31,7 +31,7 @@ router.post('/track_credit_card_page', checkToken, createCreditVisits);
 router.get('/verify-email', verify_email);
 router.post('/email_clicks', checkToken, createEmailClicks );
 
-router.get('/three_spins_win', checkToken, createDailyEmailClicks );
+router.get('/three_spins_win', createDailyEmailClicks );
 router.post('/submit_payment_page', checkToken,  getPaymentParam);
 router.post('/call_payment_intent', checkToken,  paymentIntent);
 router.get('/completion', checkToken, completion);
